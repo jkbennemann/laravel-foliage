@@ -1,17 +1,20 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "jkbennemann/laravel-validate-business-requirements",
+    "description": "This packages allows you to validate arbitrary business requirements within your application",
     "keywords": [
-        ":vendor_name",
-        "laravel",
-        ":package_slug"
+        "Jakob Bennemann",
+        "jkbennemann",
+        "php-validate-business-requirements",
+        "arbitrary rules",
+        "business requirements",
+        "rules"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/jkbennemann/laravel-validate-business-requirements",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Jakob Bennemann",
+            "email": "github@jakob-bennemann.de",
             "role": "Developer"
         }
     ],
@@ -35,19 +38,19 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Jkbennemann\\BusinessRequirements\\": "src/",
+            "Jkbennemann\\BusinessRequirements\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Jkbennemann\\BusinessRequirements\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "clear": "@php vendor/bin/testbench package:purge-laravel-validate-business-requirements --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
             "@composer run prepare",
@@ -73,10 +76,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Jkbennemann\\BusinessRequirements\\BusinessRequirementsServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "BusinessRequirements": "Jkbennemann\\BusinessRequirements\\Facades\\BusinessRequirements"
             }
         }
     },

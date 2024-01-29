@@ -1,12 +1,14 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+declare(strict_types=1);
+
+namespace Jkbennemann\BusinessRequirements\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class BusinessRequirementsCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-validate-business-requirements';
 
     public $description = 'My command';
 
