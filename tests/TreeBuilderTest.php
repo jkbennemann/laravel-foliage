@@ -146,7 +146,6 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
         [RuleTwo::class, ['bar' => 'baz']]
     );
     $ruleData = $rule->toArray();
-    var_dump($rule->jsonSerialize());
 
     expect($rule)
         ->toBeInstanceOf(Rule::class)
