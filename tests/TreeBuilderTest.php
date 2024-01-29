@@ -127,7 +127,7 @@ it('can build a simple tree structure with multiple rules - syntax 1', function 
                     'name' => 'rule_2',
                     'operation' => null,
                     'type' => 'leaf',
-                ]
+                ],
             ],
             'data' => null,
             'name' => null,
@@ -172,7 +172,7 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
                     'name' => 'rule_2',
                     'operation' => null,
                     'type' => 'leaf',
-                ]
+                ],
             ],
             'data' => null,
             'name' => null,
@@ -215,7 +215,7 @@ it('can build a tree structure from a json string', function () {
                     'name' => 'rule_2',
                     'operation' => null,
                     'type' => 'leaf',
-                ]
+                ],
             ],
             'data' => null,
             'name' => null,

@@ -10,7 +10,6 @@ use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 
 class RuleOne extends BaseValidationRule
 {
-
     protected function validation(ValidationPayloadContract $payload): void
     {
         // TODO: Implement validation() method.
