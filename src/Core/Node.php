@@ -8,8 +8,9 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\Validator;
+use JsonSerializable;
 
-class Node implements Arrayable
+class Node implements Arrayable, JsonSerializable
 {
     public const OPERATION_AND = 'AND';
 
@@ -69,7 +70,7 @@ class Node implements Arrayable
     public function validate(ValidationPayloadContract|array $payload): void
     {
         if ($payload instanceof ValidationPayloadContract) {
-            $payload = $payload->getDatetime();
+            $payload = $payload->getData();
         }
 
         $this->validator->evaluate($this, $payload);
@@ -112,5 +113,10 @@ class Node implements Arrayable
         }
 
         return null;
+    }
+
+    public function jsonSerialize(): string
+    {
+        return json_encode($this->toArray());
     }
 }

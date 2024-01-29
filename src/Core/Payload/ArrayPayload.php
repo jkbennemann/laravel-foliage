@@ -6,13 +6,13 @@ namespace Jkbennemann\BusinessRequirements\Core\Payload;
 
 use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
 
-readonly class ArrayPayload implements ValidationPayloadContract
+class ArrayPayload implements ValidationPayloadContract
 {
-    public function __construct(private array $data)
+    public function __construct(private readonly array $data)
     {
     }
 
-    public function getDatetime(): array
+    public function getData(): array
     {
         return $this->data;
     }

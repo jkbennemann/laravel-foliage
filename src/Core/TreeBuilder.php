@@ -6,6 +6,7 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
 use Jkbennemann\BusinessRequirements\Exceptions\TreeBuilderException;
 use ReflectionClass;
 use ReflectionException;
@@ -16,7 +17,7 @@ class TreeBuilder
 
     public function __construct()
     {
-        $this->availableRules = config('validation-business-requirements.available_rules', []);
+        $this->availableRules = config('validate-business-requirements.available_rules', []);
     }
 
     /**
@@ -52,7 +53,7 @@ class TreeBuilder
     public function buildNode(
         Node $node,
         ?string $ruleKey,
-        array $ruleData,
+        array|ValidationPayloadContract $ruleData,
         ?Node $parent
     ): Node {
         /*
@@ -60,6 +61,10 @@ class TreeBuilder
          * - Create a rule instance if it's a "leaf"
          * - Create a child node if it's a "node" -> can be seen as decider class aka AND/OR node
          */
+        if ($ruleData instanceof ValidationPayloadContract) {
+            $ruleData = $ruleData->getData();
+        }
+
         if ($ruleData['type'] === Node::TYPE_LEAF) {
             //create rule
             $rule = null;
@@ -87,7 +92,7 @@ class TreeBuilder
 
             if (! $rule) {
                 throw new Exception(
-                    sprintf('Rule [%s] does not exist', $ruleData['rule'])
+                    sprintf('Rule [%s] does not exist', $ruleData['rule'] ?? 'not available')
                 );
             }
 

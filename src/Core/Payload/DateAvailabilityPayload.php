@@ -7,13 +7,13 @@ namespace Jkbennemann\BusinessRequirements\Core\Payload;
 use DateTimeInterface;
 use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
 
-readonly class DateAvailabilityPayload implements ValidationPayloadContract
+class DateAvailabilityPayload implements ValidationPayloadContract
 {
-    public function __construct(private DateTimeInterface $datetime)
+    public function __construct(private readonly DateTimeInterface $datetime)
     {
     }
 
-    public function getDatetime(): array
+    public function getData(): array
     {
         return [$this->datetime];
     }

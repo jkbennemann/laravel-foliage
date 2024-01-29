@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jkbennemann\BusinessRequirements\Core;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use ReflectionException;
 
@@ -13,7 +14,7 @@ class Rule
     public function __construct(
         private ?Node $node
     ) {
-        $this->node = resolve(Node::class);
+        $this->node = $node ?: resolve(Node::class);
     }
 
     public static function fromNode(Node $node): Rule
@@ -25,7 +26,7 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public static function single(string $rule, array $data, ?Node $parent = null): Rule
+    public static function single(string $rule, array|ValidationPayloadContract $data, ?Node $parent = null): Rule
     {
         /**
          * @var BaseValidationRule $ruleInstance
@@ -35,7 +36,7 @@ class Rule
         $node = new Node(new TreeValidator());
         $nodeData = [
             'type' => Node::TYPE_LEAF,
-            'data' => $data,
+            'data' => $data instanceof ValidationPayloadContract ? $data->getData() : $data,
         ];
         $node = $builder->buildNode($node, $ruleInstance->normalizedKey(), $nodeData, $parent);
 
@@ -64,7 +65,7 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public static function not(string $rule, array $data): Rule
+    public static function not(string $rule, array|ValidationPayloadContract $data): Rule
     {
         $rule = self::single($rule, $data);
         $rule->node->operation = Node::OPERATION_NOT;

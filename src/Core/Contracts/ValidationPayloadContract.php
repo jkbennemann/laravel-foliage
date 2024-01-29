@@ -6,5 +6,5 @@ namespace Jkbennemann\BusinessRequirements\Core\Contracts;
 
 interface ValidationPayloadContract
 {
-    public function getDatetime(): array;
+    public function getData(): array;
 }

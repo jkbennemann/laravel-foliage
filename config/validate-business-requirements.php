@@ -17,4 +17,6 @@ return [
     'available_rules' => [
         //add your rules here
     ],
+
+    'validator' => \Jkbennemann\BusinessRequirements\Validator\TreeValidator::class,
 ];
