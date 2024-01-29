@@ -22,6 +22,15 @@ class RuleValidation extends Exception
         return new RuleValidation('Unexpected error during validation');
     }
 
+    public static function notEnabled(?string $ruleName = null): RuleValidation
+    {
+        if (!$ruleName) {
+            return new RuleValidation('Rule is not enabled');
+        }
+
+        return new RuleValidation(sprintf('Rule [%s] is not enabled', $ruleName));
+    }
+
     final public function exceptionKey(): string
     {
         if (! empty($this->customKey())) {

@@ -7,6 +7,7 @@ namespace Jkbennemann\BusinessRequirements\Core;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
+use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 use Jkbennemann\BusinessRequirements\Exceptions\TreeBuilderException;
 use ReflectionClass;
 use ReflectionException;
@@ -91,9 +92,7 @@ class TreeBuilder
             }
 
             if (! $rule) {
-                throw new Exception(
-                    sprintf('Rule [%s] does not exist', $ruleData['rule'] ?? 'not available')
-                );
+                throw RuleValidation::notEnabled($ruleData['rule'] ?? null);
             }
 
             return $node;

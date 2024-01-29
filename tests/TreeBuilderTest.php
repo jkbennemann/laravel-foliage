@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Jkbennemann\BusinessRequirements\Core\Node;
 use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
 use Jkbennemann\BusinessRequirements\Core\Rule;
 use Jkbennemann\BusinessRequirements\Core\TreeBuilder;
+use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
 
@@ -221,3 +223,11 @@ it('can build a tree structure from a json string', function () {
             'type' => 'node',
         ]);
 });
+
+it('cannot build a tree for a non existing rule', function () {
+    Rule::single('not-existing', []);
+})->throws(BindingResolutionException::class);
+
+it('cannot build a tree for a not enabled but existing rule', function () {
+    Rule::single(RuleOne::class, []);
+})->throws(RuleValidation::class);

@@ -36,6 +36,7 @@ class Rule
         $node = new Node(new TreeValidator());
         $nodeData = [
             'type' => Node::TYPE_LEAF,
+            'rule' => $ruleInstance->normalizedKey(),
             'data' => $data instanceof ValidationPayloadContract ? $data->getData() : $data,
         ];
         $node = $builder->buildNode($node, $ruleInstance->normalizedKey(), $nodeData, $parent);
