@@ -65,6 +65,10 @@ class TreeValidator extends BaseValidator
         $disjunctionRules = 0;
         /** @var Node $childNode */
         foreach ($node->children as $childNode) {
+            //TODO: extract the following code into a strategy
+            //$strategy = $operationFactory->make($node->operation);
+            //$result = $strategy->execute($childNode, $payload);
+
             if ($node->operation === Node::OPERATION_AND) {
                 try {
                     $this->evaluate($childNode, $payload);
