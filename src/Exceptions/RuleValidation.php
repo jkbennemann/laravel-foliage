@@ -6,6 +6,7 @@ namespace Jkbennemann\BusinessRequirements\Exceptions;
 
 use Exception;
 use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
+use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
 use Throwable;
 
 class RuleValidation extends Exception
@@ -13,15 +14,32 @@ class RuleValidation extends Exception
     public function __construct(
         private readonly ?BaseValidationRule $rule,
         string $message,
+        private readonly ?ValidationPayloadContract $payload = null,
         int $statusCode = 422,
         ?Throwable $previous = null
     ) {
         parent::__construct($message, $statusCode, $previous);
     }
 
-    public function failedRule(): BaseValidationRule
+    public function failedRule(): ?BaseValidationRule
     {
         return $this->rule;
+    }
+
+    public function ruleSettings(): ?array
+    {
+        return $this->rule?->settings();
+    }
+
+    public function payload(): array
+    {
+        $data = $this->payload?->getData();
+
+        if ($data) {
+            return $data;
+        }
+
+        return [];
     }
 
     public static function unexpected(?BaseValidationRule $rule = null): RuleValidation
