@@ -10,9 +10,12 @@ use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 
 class RuleOne extends BaseValidationRule
 {
+    /** @throws RuleValidation */
     protected function validation(ValidationPayloadContract $payload): void
     {
-        // TODO: Implement validation() method.
+        if (!in_array($this->settings()['foo'], $payload->getData())) {
+            throw new RuleValidation('data mismatch');
+        }
     }
 
     protected function key(): string
@@ -22,6 +25,6 @@ class RuleOne extends BaseValidationRule
 
     protected function inverseValidationException(ValidationPayloadContract $payload): RuleValidation
     {
-        // TODO: Implement inverseValidationException() method.
+        throw new RuleValidation('data matches but should not');
     }
 }
