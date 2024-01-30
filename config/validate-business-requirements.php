@@ -20,5 +20,5 @@ return [
 
     'validator' => \Jkbennemann\BusinessRequirements\Validator\TreeValidator::class,
 
-    'validation_data_builder' => \Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder::class
+    'validation_data_builder' => \Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder::class,
 ];

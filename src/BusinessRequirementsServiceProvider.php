@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Jkbennemann\BusinessRequirements;
 
 use Jkbennemann\BusinessRequirements\Commands\BusinessRequirementsCommand;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
+use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
 use Spatie\LaravelPackageTools\Package;
@@ -33,7 +33,6 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
         $this->app->bind(BaseValidator::class, function ($app) {
             return new TreeValidator($app->make(ValidationDataContract::class));
         });
-
 
     }
 }
