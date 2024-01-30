@@ -12,7 +12,7 @@ class RuleTwo extends BaseValidationRule
 {
     protected function validation(BaseValidationPayload $payload): void
     {
-        if (! in_array($this->settings()['bar'], $payload->toArray())) {
+        if (! in_array($this->settings()['bar'], $payload->toArray(), true)) {
             throw new RuleValidation($this, 'data mismatch');
         }
     }
