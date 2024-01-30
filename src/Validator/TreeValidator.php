@@ -8,23 +8,11 @@ use Exception;
 use Illuminate\Support\Collection;
 use Jkbennemann\BusinessRequirements\Core\Node;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\Validator;
+use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use ReflectionException;
 
-class TreeValidator implements Validator
+class TreeValidator extends BaseValidator
 {
-    protected Collection $validationErrors;
-
-    public function __construct(
-        private ?ValidationDataContract $payloadBuilder = null
-    ) {
-        if (! $this->payloadBuilder) {
-            $this->payloadBuilder = new ValidationDataBuilder();
-        }
-        $this->validationErrors = new Collection();
-    }
-
     /**
      * @throws ReflectionException
      * @throws RuleValidation
@@ -43,7 +31,7 @@ class TreeValidator implements Validator
     /**
      * Validation logic of the rule.
      *
-     * @throws RuleValidation|ReflectionException exception
+     * @throws RuleValidation exception
      */
     private function evaluateLeaf(Node $leafNode, array $payload): void
     {

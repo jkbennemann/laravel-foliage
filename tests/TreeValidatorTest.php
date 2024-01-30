@@ -7,6 +7,7 @@ use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
+use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
 
 it('can validate a simple rule', function () {
     config()->set('validate-business-requirements.available_rules', [
@@ -15,7 +16,7 @@ it('can validate a simple rule', function () {
 
     $node = Rule::single(RuleOne::class, ['foo' => 'bar'])->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     expect($validator->evaluate($node, ['foo' => 'bar']))
         ->toBeEmpty();
 });
@@ -27,7 +28,7 @@ it('throws an exception on rule validation error', function () {
 
     $node = Rule::single(RuleOne::class, ['foo' => 'bar'])->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     $validator->evaluate($node, []);
 })->throws(RuleValidation::class);
 
@@ -38,7 +39,7 @@ it('can validate a simple rule inverse rule', function () {
 
     $node = Rule::not(RuleOne::class, ['foo' => 'bar'])->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     expect($validator->evaluate($node, ['foo' => 'not-bar', 'is_update' => true]))
         ->toBeEmpty();
 });
@@ -50,7 +51,7 @@ it('throws an exception on inverse rule validation error', function () {
 
     $node = Rule::not(RuleOne::class, ['foo' => 'bar'])->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     $validator->evaluate($node, ['foo' => 'bar']);
 })->throws(RuleValidation::class);
 
@@ -65,7 +66,7 @@ it('can validate a conjunction rule', function () {
         [RuleTwo::class, ['bar' => 'baz']],
     )->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
 })->expectNotToPerformAssertions();
 
@@ -80,7 +81,7 @@ it('can validate a disjunction rule', function () {
         [RuleTwo::class, ['bar' => 'baz']],
     )->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     $validator->evaluate($node, ['foo' => 'not-bar', 'bar' => 'baz']);
 })->expectNotToPerformAssertions();
 
@@ -98,7 +99,7 @@ it('can validate a multi-level disjunction rule', function () {
         )
     )->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
 })->expectNotToPerformAssertions();
 
@@ -116,6 +117,6 @@ it('can validate a multi-level conjunction rule', function () {
         )
     )->node();
 
-    $validator = new TreeValidator();
+    $validator = new TreeValidator(new ValidationDataBuilder());
     $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
 })->expectNotToPerformAssertions();

@@ -6,7 +6,6 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use ReflectionException;
 
 class Rule
@@ -33,7 +32,7 @@ class Rule
          */
         $ruleInstance = resolve($rule, ['data' => []]);
         $builder = new TreeBuilder();
-        $node = new Node(new TreeValidator());
+        $node = app(Node::class);
         $nodeData = [
             'type' => Node::TYPE_LEAF,
             'rule' => $ruleInstance->normalizedKey(),

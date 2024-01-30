@@ -10,7 +10,7 @@ return [
     |
     | Add the available rules of your application here to register them.
     | Your rules must implement the
-    | Jkbennemann\BusinessRequirements\Core\BaseValidationRule.php class
+    | \Jkbennemann\BusinessRequirements\Core\BaseValidationRule.php class
     |
     */
 
@@ -19,4 +19,6 @@ return [
     ],
 
     'validator' => \Jkbennemann\BusinessRequirements\Validator\TreeValidator::class,
+
+    'validation_data_builder' => \Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder::class
 ];
