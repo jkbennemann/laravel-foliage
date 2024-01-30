@@ -77,10 +77,16 @@ class TreeValidator implements Validator
             $validationData->setUpdate($payload['is_update']);
         }
 
-        $leafNode->rule->validate(
-            $validationData,
-            $leafNode->operation === Node::OPERATION_NOT
-        );
+        try {
+            $leafNode->rule->validate(
+                $validationData,
+                $leafNode->operation === Node::OPERATION_NOT
+            );
+        } catch (RuleValidation $exception) {
+            $this->validationErrors->add($exception);
+
+            throw $exception;
+        }
     }
 
     /**
@@ -92,14 +98,19 @@ class TreeValidator implements Validator
 
         $lastDisjunctionError = null;
         $isValid = false;
+        /** @var Node $childNode */
         foreach ($node->children as $childNode) {
             if ($node->operation === Node::OPERATION_AND) {
-                $this->evaluate($childNode, $payload);
+                try {
+                    $this->evaluate($childNode, $payload);
 
-                $result = true;
-                $isValid = true;
+                    $result = true;
+                    $isValid = true;
 
-                continue;
+                    continue;
+                } catch (RuleValidation $exception) {
+                    $this->validationErrors->add($exception);
+                }
             }
 
             if ($node->operation === Node::OPERATION_OR) {
@@ -110,8 +121,9 @@ class TreeValidator implements Validator
                     $isValid = true;
                 } catch (RuleValidation $exception) {
                     if (! $isValid) {
-                        throw $exception;
+//                        throw $exception;
                     }
+                    $this->validationErrors->add($exception);
                     $lastDisjunctionError = $exception;
                 }
             }

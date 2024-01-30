@@ -92,7 +92,7 @@ class TreeBuilder
             }
 
             if (! $rule) {
-                throw RuleValidation::notEnabled($ruleData['rule'] ?? null);
+                throw RuleValidation::notEnabled($rule);
             }
 
             return $node;

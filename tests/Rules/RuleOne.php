@@ -14,7 +14,7 @@ class RuleOne extends BaseValidationRule
     protected function validation(ValidationPayloadContract $payload): void
     {
         if (!in_array($this->settings()['foo'], $payload->getData())) {
-            throw new RuleValidation('data mismatch');
+            throw new RuleValidation($this,'data mismatch');
         }
     }
 
@@ -25,6 +25,6 @@ class RuleOne extends BaseValidationRule
 
     protected function inverseValidationException(ValidationPayloadContract $payload): RuleValidation
     {
-        throw new RuleValidation('data matches but should not');
+        throw new RuleValidation($this, 'data matches but should not');
     }
 }

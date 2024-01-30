@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Jkbennemann\BusinessRequirements\Exceptions;
 
 use Exception;
+use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
 use Throwable;
 
 class RuleValidation extends Exception
 {
     public function __construct(
+        private readonly ?BaseValidationRule $rule,
         string $message,
         int $statusCode = 422,
         ?Throwable $previous = null
@@ -17,18 +19,23 @@ class RuleValidation extends Exception
         parent::__construct($message, $statusCode, $previous);
     }
 
-    public static function unexpected(): RuleValidation
+    public function failedRule(): BaseValidationRule
     {
-        return new RuleValidation('Unexpected error during validation');
+        return $this->rule;
     }
 
-    public static function notEnabled(?string $ruleName = null): RuleValidation
+    public static function unexpected(?BaseValidationRule $rule = null): RuleValidation
     {
-        if (! $ruleName) {
-            return new RuleValidation('Rule is not enabled');
+        return new RuleValidation($rule, 'Unexpected error during validation');
+    }
+
+    public static function notEnabled(?BaseValidationRule $rule = null): RuleValidation
+    {
+        if (!$rule) {
+            return new RuleValidation($rule, 'Rule is not enabled');
         }
 
-        return new RuleValidation(sprintf('Rule [%s] is not enabled', $ruleName));
+        return new RuleValidation($rule, sprintf('Rule [%s] is not enabled', $rule->normalizedKey()));
     }
 
     final public function exceptionKey(): string

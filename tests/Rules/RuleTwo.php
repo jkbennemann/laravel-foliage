@@ -12,7 +12,9 @@ class RuleTwo extends BaseValidationRule
 {
     protected function validation(ValidationPayloadContract $payload): void
     {
-        // TODO: Implement validation() method.
+        if (!in_array($this->settings()['bar'], $payload->getData())) {
+            throw new RuleValidation($this, 'data mismatch');
+        }
     }
 
     protected function key(): string
