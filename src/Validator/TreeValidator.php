@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Jkbennemann\BusinessRequirements\Validator;
 
 use Exception;
-use Illuminate\Support\Collection;
 use Jkbennemann\BusinessRequirements\Core\Node;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
@@ -23,9 +22,7 @@ class TreeValidator extends BaseValidator
             return;
         }
 
-        $rootNode->isLeaf
-            ? $this->evaluateLeaf($rootNode, $payload)
-            : $this->evaluateNode($rootNode, $payload);
+        $this->evaluateNode($rootNode, $payload);
     }
 
     /**
@@ -57,49 +54,38 @@ class TreeValidator extends BaseValidator
      */
     private function evaluateNode(Node $node, array $payload): void
     {
-        $result = $node->operation === Node::OPERATION_AND;
+        if ($node->isLeaf) {
+            $this->evaluateLeaf($node, $payload);
 
-        $lastDisjunctionError = null;
-        $isValid = false;
+            return;
+        }
+
+        $disjunctionRulesFailed = 0;
+        $disjunctionRules = 0;
         /** @var Node $childNode */
         foreach ($node->children as $childNode) {
             if ($node->operation === Node::OPERATION_AND) {
                 try {
                     $this->evaluate($childNode, $payload);
 
-                    $result = true;
-                    $isValid = true;
-
                     continue;
-                } catch (RuleValidation $exception) {
-                    $this->validationErrors->add($exception);
+                } catch (RuleValidation) {
                 }
             }
 
             if ($node->operation === Node::OPERATION_OR) {
+                $disjunctionRules++;
                 try {
                     $this->evaluate($childNode, $payload);
 
-                    $result = true;
-                    $isValid = true;
-                } catch (RuleValidation $exception) {
-                    if (! $isValid) {
-                        //                        throw $exception;
-                    }
-                    $this->validationErrors->add($exception);
-                    $lastDisjunctionError = $exception;
+                } catch (RuleValidation) {
+                    $disjunctionRulesFailed++;
                 }
             }
         }
 
-        //push error for OR validation if needed.
-        if ($result === false && $lastDisjunctionError && ! $node->isLeaf) {
-            throw $lastDisjunctionError;
+        if ($this->raiseException && $this->errors()->isNotEmpty() && $disjunctionRulesFailed === $disjunctionRules && $disjunctionRules !== 0) {
+            throw $this->errors()->first();
         }
-    }
-
-    public function errors(): Collection
-    {
-        return $this->validationErrors;
     }
 }

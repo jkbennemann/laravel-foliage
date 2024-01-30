@@ -15,6 +15,7 @@ class RuleValidation extends Exception
         private readonly ?BaseValidationRule $rule,
         string $message,
         private readonly ?BaseValidationPayload $payload = null,
+        private readonly ?string $customKey = null,
         int $statusCode = 422,
         ?Throwable $previous = null
     ) {
@@ -44,16 +45,16 @@ class RuleValidation extends Exception
 
     public static function unexpected(?BaseValidationRule $rule = null): RuleValidation
     {
-        return new RuleValidation($rule, 'Unexpected error during validation');
+        return new RuleValidation($rule, 'Unexpected error during validation', null, 'generic_error');
     }
 
     public static function notEnabled(?BaseValidationRule $rule = null): RuleValidation
     {
         if (! $rule) {
-            return new RuleValidation($rule, 'Rule is not enabled');
+            return new RuleValidation($rule, 'Rule is not enabled', null, 'not_enabled');
         }
 
-        return new RuleValidation($rule, sprintf('Rule [%s] is not enabled', $rule->normalizedKey()));
+        return new RuleValidation($rule, sprintf('Rule [%s] is not enabled', $rule->normalizedKey()), null, 'not_enabled');
     }
 
     final public function exceptionKey(): string
@@ -67,6 +68,6 @@ class RuleValidation extends Exception
 
     protected function customKey(): string
     {
-        return '';
+        return $this->customKey ?? '';
     }
 }
