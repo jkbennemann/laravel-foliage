@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Jkbennemann\BusinessRequirements\Tests\Rules;
 
 use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
-use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
+use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 
 class RuleOne extends BaseValidationRule
 {
     /** @throws RuleValidation */
-    protected function validation(ValidationPayloadContract $payload): void
+    protected function validation(BaseValidationPayload $payload): void
     {
-        if (! in_array($this->settings()['foo'], $payload->getData())) {
+        $settings = $this->settings()['foo'];
+        $validateAgainst = $payload->toArray();
+        if (! in_array($settings, $validateAgainst, true)) {
             throw new RuleValidation($this, 'data mismatch', $payload);
         }
     }
@@ -23,7 +25,7 @@ class RuleOne extends BaseValidationRule
         return 'rule_1';
     }
 
-    protected function inverseValidationException(ValidationPayloadContract $payload): RuleValidation
+    protected function inverseValidationException(BaseValidationPayload $payload): RuleValidation
     {
         throw new RuleValidation($this, 'data matches but should not', $payload);
     }

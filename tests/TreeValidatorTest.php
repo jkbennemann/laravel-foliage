@@ -39,7 +39,7 @@ it('can validate a simple rule inverse rule', function () {
     $node = Rule::not(RuleOne::class, ['foo' => 'bar'])->node();
 
     $validator = new TreeValidator();
-    expect($validator->evaluate($node, ['foo' => 'not-bar']))
+    expect($validator->evaluate($node, ['foo' => 'not-bar', 'is_update' => true]))
         ->toBeEmpty();
 });
 

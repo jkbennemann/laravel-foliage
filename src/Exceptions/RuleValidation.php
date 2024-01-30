@@ -6,7 +6,7 @@ namespace Jkbennemann\BusinessRequirements\Exceptions;
 
 use Exception;
 use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
-use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
+use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 use Throwable;
 
 class RuleValidation extends Exception
@@ -14,7 +14,7 @@ class RuleValidation extends Exception
     public function __construct(
         private readonly ?BaseValidationRule $rule,
         string $message,
-        private readonly ?ValidationPayloadContract $payload = null,
+        private readonly ?BaseValidationPayload $payload = null,
         int $statusCode = 422,
         ?Throwable $previous = null
     ) {
@@ -33,7 +33,7 @@ class RuleValidation extends Exception
 
     public function payload(): array
     {
-        $data = $this->payload?->getData();
+        $data = $this->payload?->toArray();
 
         if ($data) {
             return $data;

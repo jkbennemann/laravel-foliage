@@ -6,7 +6,7 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
+use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\Validator;
 use JsonSerializable;
 
@@ -67,10 +67,10 @@ class Node implements Arrayable, JsonSerializable
         return $data;
     }
 
-    public function validate(ValidationPayloadContract|array $payload): void
+    public function validate(BaseValidationPayload|array $payload): void
     {
-        if ($payload instanceof ValidationPayloadContract) {
-            $payload = $payload->getData();
+        if ($payload instanceof BaseValidationPayload) {
+            $payload = $payload->toArray();
         }
 
         $this->validator->evaluate($this, $payload);

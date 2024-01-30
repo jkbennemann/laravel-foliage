@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Jkbennemann\BusinessRequirements\Core\Payload;
 
-use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
-
-class ArrayPayload implements ValidationPayloadContract
+class ArrayPayload extends BaseValidationPayload
 {
-    public function __construct(private readonly array $data)
+    private array $localData;
+
+    public function __construct($data)
     {
+        $this->localData = [...$data];
     }
 
-    public function getData(): array
+    public function toArray(): array
     {
-        return $this->data;
+        return $this->localData;
     }
 }

@@ -7,6 +7,7 @@ namespace Jkbennemann\BusinessRequirements\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Jkbennemann\BusinessRequirements\BusinessRequirementsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelData\LaravelDataServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -23,6 +24,7 @@ class TestCase extends Orchestra
     {
         return [
             BusinessRequirementsServiceProvider::class,
+            LaravelDataServiceProvider::class,
         ];
     }
 

@@ -6,7 +6,7 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Jkbennemann\BusinessRequirements\Core\Contracts\ValidationPayloadContract;
+use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 use Jkbennemann\BusinessRequirements\Exceptions\TreeBuilderException;
 use ReflectionClass;
@@ -54,7 +54,7 @@ class TreeBuilder
     public function buildNode(
         Node $node,
         ?string $ruleKey,
-        array|ValidationPayloadContract $ruleData,
+        array|BaseValidationPayload $ruleData,
         ?Node $parent
     ): Node {
         /*
@@ -62,8 +62,8 @@ class TreeBuilder
          * - Create a rule instance if it's a "leaf"
          * - Create a child node if it's a "node" -> can be seen as decider class aka AND/OR node
          */
-        if ($ruleData instanceof ValidationPayloadContract) {
-            $ruleData = $ruleData->getData();
+        if ($ruleData instanceof BaseValidationPayload) {
+            $ruleData = $ruleData->toArray();
         }
 
         if ($ruleData['type'] === Node::TYPE_LEAF) {
