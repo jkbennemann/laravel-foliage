@@ -49,7 +49,7 @@ class RuleValidation extends Exception
 
     public static function notEnabled(?BaseValidationRule $rule = null): RuleValidation
     {
-        if (!$rule) {
+        if (! $rule) {
             return new RuleValidation($rule, 'Rule is not enabled');
         }
 
