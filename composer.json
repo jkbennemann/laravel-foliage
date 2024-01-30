@@ -1,6 +1,6 @@
 {
     "name": "jkbennemann/laravel-validate-business-requirements",
-    "description": "This packages allows you to validate arbitrary business requirements within your application",
+    "description": "This packages allows you to validate arbitrary business requirements within your application against a defined set of rules.",
     "keywords": [
         "Jakob Bennemann",
         "jkbennemann",
