@@ -121,7 +121,7 @@ class TreeValidator implements Validator
                     $isValid = true;
                 } catch (RuleValidation $exception) {
                     if (! $isValid) {
-//                        throw $exception;
+                        //                        throw $exception;
                     }
                     $this->validationErrors->add($exception);
                     $lastDisjunctionError = $exception;
