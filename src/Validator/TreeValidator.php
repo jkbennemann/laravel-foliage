@@ -61,6 +61,7 @@ class TreeValidator extends BaseValidator
         }
 
         $disjunctionRulesFailed = 0;
+        $conjunctionRuleFailed = false;
         $disjunctionRules = 0;
         /** @var Node $childNode */
         foreach ($node->children as $childNode) {
@@ -70,6 +71,7 @@ class TreeValidator extends BaseValidator
 
                     continue;
                 } catch (RuleValidation) {
+                    $conjunctionRuleFailed = true;
                 }
             }
 
@@ -82,6 +84,10 @@ class TreeValidator extends BaseValidator
                     $disjunctionRulesFailed++;
                 }
             }
+        }
+
+        if ($this->raiseException && $conjunctionRuleFailed) {
+            throw $this->errors()->first();
         }
 
         if ($this->raiseException && $this->errors()->isNotEmpty() && $disjunctionRulesFailed === $disjunctionRules && $disjunctionRules !== 0) {

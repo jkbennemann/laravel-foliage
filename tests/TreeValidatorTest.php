@@ -70,6 +70,36 @@ it('can validate a conjunction rule', function () {
     $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
 })->expectNotToPerformAssertions();
 
+it('throws an exception on a conjunction rule validation error', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        RuleOne::class,
+        RuleTwo::class,
+    ]);
+
+    $node = Rule::and(
+        [RuleOne::class, ['foo' => 'bar']],
+        [RuleTwo::class, ['bar' => 'not-baz']],
+    )->node();
+
+    $validator = new TreeValidator(new ValidationDataBuilder());
+    $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
+})->throws(RuleValidation::class);
+
+it('throws an exception on a disjunction rule validation error', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        RuleOne::class,
+        RuleTwo::class,
+    ]);
+
+    $node = Rule::or(
+        [RuleOne::class, ['foo' => 'not-bar']],
+        [RuleTwo::class, ['bar' => 'not-baz']],
+    )->node();
+
+    $validator = new TreeValidator(new ValidationDataBuilder());
+    $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
+})->throws(RuleValidation::class);
+
 it('can validate a disjunction rule', function () {
     config()->set('validate-business-requirements.available_rules', [
         RuleOne::class,
