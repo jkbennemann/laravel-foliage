@@ -11,6 +11,7 @@ use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 abstract class BaseValidator
 {
     protected Collection $validationErrors;
+
     protected bool $isValid = true;
 
     public function __construct(
