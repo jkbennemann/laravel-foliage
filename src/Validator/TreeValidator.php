@@ -11,8 +11,6 @@ use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 
 class TreeValidator extends BaseValidator
 {
-    private bool $isValid = true;
-
     /**
      * @throws RuleValidation
      */
@@ -133,10 +131,5 @@ class TreeValidator extends BaseValidator
 
         return false;
 
-    }
-
-    public function isValid(): bool
-    {
-        return $this->isValid;
     }
 }

@@ -11,6 +11,7 @@ use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 abstract class BaseValidator
 {
     protected Collection $validationErrors;
+    protected bool $isValid = true;
 
     public function __construct(
         protected readonly ValidationDataContract $payloadBuilder,
@@ -47,5 +48,10 @@ abstract class BaseValidator
         return $this->validationErrors->unique(function (RuleValidation $error) {
             return $error->failedRule()->normalizedKey();
         });
+    }
+
+    public function isValid(): bool
+    {
+        return $this->isValid;
     }
 }
