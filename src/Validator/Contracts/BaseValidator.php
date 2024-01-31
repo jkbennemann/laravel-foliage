@@ -19,7 +19,7 @@ abstract class BaseValidator
         $this->validationErrors = new Collection();
     }
 
-    abstract public function evaluate(Node $rootNode, array $payload): void;
+    abstract public function evaluate(Node $rootNode, array $payload): bool;
 
     public function setRaiseException(bool $raiseException): self
     {

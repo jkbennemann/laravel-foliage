@@ -8,21 +8,21 @@ use Exception;
 use Jkbennemann\BusinessRequirements\Core\Node;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
-use ReflectionException;
 
 class TreeValidator extends BaseValidator
 {
+    private bool $isValid = true;
+
     /**
-     * @throws ReflectionException
      * @throws RuleValidation
      */
-    public function evaluate(Node $rootNode, array $payload): void
+    public function evaluate(Node $rootNode, array $payload): bool
     {
         if ($rootNode->isEmpty()) {
-            return;
+            return true;
         }
 
-        $this->evaluateNode($rootNode, $payload);
+        return $this->evaluateNode($rootNode, $payload);
     }
 
     /**
@@ -30,7 +30,7 @@ class TreeValidator extends BaseValidator
      *
      * @throws RuleValidation exception
      */
-    private function evaluateLeaf(Node $leafNode, array $payload): void
+    private function evaluateLeaf(Node $leafNode, array $payload): bool
     {
         $rule = $leafNode->rule;
         $validationPayload = $this->payloadBuilder->build($rule, $payload);
@@ -42,6 +42,8 @@ class TreeValidator extends BaseValidator
                 $validationPayload,
                 $leafNode->operation === Node::OPERATION_NOT
             );
+
+            return true;
         } catch (RuleValidation $exception) {
             $this->validationErrors->add($exception);
 
@@ -52,17 +54,32 @@ class TreeValidator extends BaseValidator
     /**
      * @throws RuleValidation|Exception
      */
-    private function evaluateNode(Node $node, array $payload): void
+    private function evaluateNode(Node $node, array $payload): bool
     {
         if ($node->isLeaf) {
-            $this->evaluateLeaf($node, $payload);
+            try {
+                $isValid = $this->evaluateLeaf($node, $payload);
 
-            return;
+                if ($isValid) {
+                    $this->isValid = true;
+                }
+
+                return true;
+            } catch (RuleValidation $exception) {
+                $this->isValid = false;
+
+                if ($this->raiseException) {
+                    throw $exception;
+                }
+
+                return false;
+            }
         }
 
         $disjunctionRulesFailed = 0;
-        $conjunctionRuleFailed = false;
         $disjunctionRules = 0;
+
+        $childrenResult = true;
         /** @var Node $childNode */
         foreach ($node->children as $childNode) {
             //TODO: extract the following code into a strategy
@@ -71,31 +88,55 @@ class TreeValidator extends BaseValidator
 
             if ($node->operation === Node::OPERATION_AND) {
                 try {
-                    $this->evaluate($childNode, $payload);
+                    $isValid = $this->evaluate($childNode, $payload);
+
+                    if (! $isValid) {
+                        $childrenResult = false;
+                    }
 
                     continue;
                 } catch (RuleValidation) {
-                    $conjunctionRuleFailed = true;
+                    $childrenResult = false;
                 }
             }
 
             if ($node->operation === Node::OPERATION_OR) {
                 $disjunctionRules++;
-                try {
-                    $this->evaluate($childNode, $payload);
 
+                try {
+                    $childrenResult = $this->evaluate($childNode, $payload);
+
+                    if (! $childrenResult) {
+                        $disjunctionRulesFailed++;
+                    }
                 } catch (RuleValidation) {
                     $disjunctionRulesFailed++;
                 }
             }
         }
 
-        if ($this->raiseException && $conjunctionRuleFailed) {
+        if ($disjunctionRules === $disjunctionRulesFailed && $disjunctionRules !== 0) {
+            $childrenResult = false;
+        }
+
+        if ($childrenResult === true || ($disjunctionRulesFailed !== $disjunctionRules && $disjunctionRules !== 0)) {
+            $this->isValid = true;
+
+            return true;
+        }
+
+        $this->isValid = false;
+
+        if ($this->raiseException) {
             throw $this->errors()->first();
         }
 
-        if ($this->raiseException && $this->errors()->isNotEmpty() && $disjunctionRulesFailed === $disjunctionRules && $disjunctionRules !== 0) {
-            throw $this->errors()->first();
-        }
+        return false;
+
+    }
+
+    public function isValid(): bool
+    {
+        return $this->isValid;
     }
 }
