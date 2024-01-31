@@ -100,7 +100,7 @@ class Node implements Arrayable, JsonSerializable
         return $rules;
     }
 
-    private function getRule(string $rule, Node $parent): ?BaseValidationRule
+    public function getRule(string $rule, Node $parent): ?BaseValidationRule
     {
         if ($parent->isLeaf && $parent->rule instanceof $rule) {
             return $parent->rule;
