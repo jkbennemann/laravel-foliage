@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace};
+
+use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+
+class {class} extends BaseValidationPayload
+{
+    public function __construct(
+    ) {
+    }
+}

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Jkbennemann\BusinessRequirements;
 
-use Jkbennemann\BusinessRequirements\Commands\BusinessRequirementsCommand;
+use Jkbennemann\BusinessRequirements\Commands\CreatePayloadCommand;
+use Jkbennemann\BusinessRequirements\Commands\CreateRuleCommand;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
@@ -19,7 +20,10 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-validate-business-requirements')
             ->hasConfigFile('validate-business-requirements')
-            ->hasCommand(BusinessRequirementsCommand::class);
+            ->hasCommands(
+                CreateRuleCommand::class,
+                CreatePayloadCommand::class,
+            );
     }
 
     public function packageBooted(): void

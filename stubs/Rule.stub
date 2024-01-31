@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace};
+
+use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
+use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+
+class {class} extends BaseValidationRule
+{
+    /** @throws RuleValidation */
+    protected function validation(BaseValidationPayload $payload): void
+    {
+        //your implementation
+    }
+
+    protected function key(): string
+    {
+        return '{key}';
+    }
+
+    protected function inverseValidationException(BaseValidationPayload $payload): RuleValidation
+    {
+        throw new RuleValidation($this, 'error_message', $payload, 'custom_key');
+    }
+}

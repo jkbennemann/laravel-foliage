@@ -18,6 +18,10 @@ return [
         //add your rules here
     ],
 
+    'payload_namespace' => 'App\Services\BusinessRequirements\Payloads',
+
+    'rules_namespace' => 'App\Services\BusinessRequirements\Rules',
+
     'validator' => \Jkbennemann\BusinessRequirements\Validator\TreeValidator::class,
 
     'validation_data_builder' => \Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder::class,
