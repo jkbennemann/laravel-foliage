@@ -6,11 +6,11 @@ namespace Jkbennemann\BusinessRequirements\Validator;
 
 use Illuminate\Support\Collection;
 
-readonly class Result
+class Result
 {
     public function __construct(
-        private bool $isValid,
-        private Collection $errors
+        private readonly bool $isValid,
+        private readonly Collection $errors
     ) {
     }
 

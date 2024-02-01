@@ -9,11 +9,11 @@ use Jkbennemann\BusinessRequirements\Core\TreeBuilder;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use Jkbennemann\BusinessRequirements\Validator\Result;
 
-readonly class BusinessRequirements
+class BusinessRequirements
 {
     public function __construct(
-        private BaseValidator $validator,
-        private TreeBuilder $builder
+        private readonly BaseValidator $validator,
+        private readonly TreeBuilder $builder
     ) {
     }
 
