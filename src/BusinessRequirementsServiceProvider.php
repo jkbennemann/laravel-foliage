@@ -8,7 +8,6 @@ use Illuminate\Foundation\Application;
 use Jkbennemann\BusinessRequirements\Commands\CreatePayloadCommand;
 use Jkbennemann\BusinessRequirements\Commands\CreateRuleCommand;
 use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
-use Jkbennemann\BusinessRequirements\Core\Rule;
 use Jkbennemann\BusinessRequirements\Core\RuleParser;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
