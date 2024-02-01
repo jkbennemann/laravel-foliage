@@ -19,7 +19,7 @@ trait HasValidationRules
     {
         $rules = $this->getAttribute($this->rulesField);
         $rulesArray = is_string($rules) ? json_decode($rules, true) : $rules;
-        $builder = new TreeBuilder();
+        $builder = app(TreeBuilder::class);
 
         if (empty($rulesArray)) {
             $rulesArray = [Rule::empty()->node()->toArray()];

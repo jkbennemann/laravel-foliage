@@ -18,6 +18,8 @@ return [
         //add your rules here
     ],
 
+    'rule_parser' => \Jkbennemann\BusinessRequirements\Core\RuleParser::class,
+
     'payload_namespace' => 'App\Services\BusinessRequirements\Payloads',
 
     'rules_namespace' => 'App\Services\BusinessRequirements\Rules',

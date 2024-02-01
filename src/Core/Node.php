@@ -6,8 +6,6 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use JsonSerializable;
 
 class Node implements Arrayable, JsonSerializable

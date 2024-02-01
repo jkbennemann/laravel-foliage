@@ -11,8 +11,13 @@ use Throwable;
 
 abstract class BaseValidationRule
 {
-    public function __construct(protected array $data)
+    public function __construct(protected array $data = [])
     {
+    }
+
+    public function setSettings(array $data): void
+    {
+        $this->data = $data;
     }
 
     final public function normalizedKey(): string

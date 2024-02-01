@@ -5,77 +5,79 @@ declare(strict_types=1);
 namespace Jkbennemann\BusinessRequirements\Core;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
 use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 use ReflectionException;
 
 class Rule
 {
     public function __construct(
-        private ?Node $node
+        private readonly RuleParserContract $ruleParser,
+        private ?Node $node = null,
     ) {
-        $this->node = $node ?: resolve(Node::class);
+        $this->node = $node ?: new Node();
     }
 
-    public static function fromNode(Node $node): Rule
+    public function fromNode(Node $node): Rule
     {
-        return new Rule($node);
+        return new Rule($this->ruleParser, $node);
     }
 
     /**
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public static function single(string $rule, array|BaseValidationPayload $data, ?Node $parent = null): Rule
+    public function single(string $rule, array|BaseValidationPayload $data, ?Node $parent = null): Rule
     {
+        $rule = $this->ruleParser->parse($rule);
         /**
-         * @var BaseValidationRule $ruleInstance
+         * @var BaseValidationRule $rule
          */
-        $ruleInstance = resolve($rule, ['data' => []]);
-        $builder = new TreeBuilder();
-        $node = app(Node::class);
+        $builder = new TreeBuilder($this->ruleParser);
+
         $nodeData = [
             'type' => Node::TYPE_LEAF,
-            'rule' => $ruleInstance->normalizedKey(),
+            'rule' => $rule->normalizedKey(),
             'data' => $data instanceof BaseValidationPayload ? $data->toArray() : $data,
         ];
-        $node = $builder->buildNode($node, $ruleInstance->normalizedKey(), $nodeData, $parent);
+        $node = $builder->buildNode(new Node(), $rule, $nodeData, $parent);
 
-        return new Rule($node);
+        return new Rule($this->ruleParser, $node);
     }
 
     /**
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public static function and(self|array ...$rules): Rule
+    public function and(self|array ...$rules): Rule
     {
-        return self::createNode(Node::OPERATION_AND, $rules);
+        return $this->createNode(Node::OPERATION_AND, $rules);
     }
 
     /**
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public static function or(self|array ...$rules): Rule
+    public function or(self|array ...$rules): Rule
     {
-        return self::createNode(Node::OPERATION_OR, $rules);
+        return $this->createNode(Node::OPERATION_OR, $rules);
     }
 
     /**
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public static function not(string $rule, array|BaseValidationPayload $data): Rule
+    public function not(string $rule, array|BaseValidationPayload $data): Rule
     {
-        $rule = self::single($rule, $data);
+        $rule = $this->single($rule, $data);
         $rule->node->operation = Node::OPERATION_NOT;
 
         return $rule;
     }
 
-    public static function empty(): Rule
+    public function empty(): Rule
     {
-        return new Rule(null);
+        return new Rule($this->ruleParser);
     }
 
     public function node(): Node
@@ -87,9 +89,9 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    private static function createNode(string $operation, self|array $rules): Rule
+    private function createNode(string $operation, self|array $rules): Rule
     {
-        $rootNode = resolve(Node::class);
+        $rootNode = new Node();
         $rootNode->operation = $operation;
         $rootNode->isLeaf = false;
 
@@ -97,7 +99,7 @@ class Rule
             foreach ($rules as $rule) {
                 $child = $rule;
                 if (is_array($rule)) {
-                    $node = self::single($rule[0], $rule[1], $rootNode);
+                    $node = $this->single($rule[0], $rule[1], $rootNode);
                     $child = $node;
                 }
 
@@ -105,7 +107,7 @@ class Rule
             }
         }
 
-        return new Rule($rootNode);
+        return new Rule($this->ruleParser, $rootNode);
     }
 
     public function toArray(): array

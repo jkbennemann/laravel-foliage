@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Jkbennemann\BusinessRequirements\Core\Rule;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+use Jkbennemann\BusinessRequirements\Facades\Rule;
 use Jkbennemann\BusinessRequirements\Tests\Rules\MaximumAmountRule;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;

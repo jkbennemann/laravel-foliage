@@ -6,19 +6,22 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
 use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Exceptions\TreeBuilderException;
-use ReflectionClass;
 use ReflectionException;
 
 class TreeBuilder
 {
-    private array $availableRules;
+    public function __construct(
+        private RuleParserContract $ruleParser
+    ) {
+    }
 
-    public function __construct()
+    public function setRuleParser(RuleParserContract $parser): TreeBuilder
     {
-        $this->availableRules = config('validate-business-requirements.available_rules', []);
+        $this->ruleParser = $parser;
+
+        return $this;
     }
 
     /**
@@ -39,7 +42,7 @@ class TreeBuilder
         foreach ($rules as $ruleData) {
             $this->buildNode(
                 $root,
-                $ruleData['name'],
+                $this->ruleParser->parse($ruleData['name']),
                 $ruleData,
                 null
             );
@@ -55,47 +58,22 @@ class TreeBuilder
      */
     public function buildNode(
         Node $node,
-        ?string $ruleKey,
+        ?BaseValidationRule $rule,
         array|BaseValidationPayload $ruleData,
         ?Node $parent
     ): Node {
-        /*
-         * Build the node based on the type in $ruleData['type']
-         * - Create a rule instance if it's a "leaf"
-         * - Create a child node if it's a "node" -> can be seen as decider class aka AND/OR node
-         */
         if ($ruleData instanceof BaseValidationPayload) {
             $ruleData = $ruleData->toArray();
         }
 
         if ($ruleData['type'] === Node::TYPE_LEAF) {
+            $rule->setSettings($ruleData['data']);
+
             //create rule
-            $rule = null;
-            //find correct rule
-            foreach ($this->availableRules as $possibleRule) {
-                $rule = new ReflectionClass($possibleRule);
-                if (! $rule->isSubclassOf(BaseValidationRule::class)) {
-                    continue;
-                }
-
-                /**
-                 * @var BaseValidationRule $ruleInstance
-                 */
-                $ruleInstance = resolve($rule->getName(), ['data' => $ruleData['data']]);
-                if ($ruleInstance->normalizedKey() === $ruleKey) {
-                    $node->isLeaf = true;
-                    $node->rule = $ruleInstance;
-                    $node->parent = $parent;
-                    $node->operation = $ruleData['operation'] ?? null;
-                    break;
-                }
-
-                $rule = null;
-            }
-
-            if (! $rule) {
-                throw RuleValidation::notEnabled($rule);
-            }
+            $node->isLeaf = true;
+            $node->rule = $rule;
+            $node->parent = $parent;
+            $node->operation = $ruleData['operation'] ?? null;
 
             return $node;
         }
@@ -105,11 +83,11 @@ class TreeBuilder
             $node->isLeaf = false;
             $node->operation = $ruleData['operation'];
 
-            $childNode = resolve(Node::class);
+            $childNode = new Node();
             $node->addChild(
                 $this->buildNode(
                     $childNode,
-                    $childRuleData['name'],
+                    $this->ruleParser->parse($childRuleData['name']),
                     $childRuleData,
                     $node
                 )
@@ -117,84 +95,6 @@ class TreeBuilder
         }
 
         return $node;
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws TreeBuilderException
-     */
-    public function convertFromRequest(?array $requestRules): ?array
-    {
-        if ($requestRules === null || count($requestRules) === 0) {
-            return null;
-        }
-
-        $type = $requestRules['operation'] === null
-            ? 'single'
-            : $requestRules['operation'];
-        $ruleName = $requestRules['name'];
-        $data = $requestRules['data'];
-        $children = $requestRules['children'];
-
-        return $this->buildRule($type, $ruleName, $children, $data)->toArray();
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws TreeBuilderException
-     */
-    private function buildRule(
-        ?string $operation,
-        ?string $ruleName,
-        array $children,
-        ?array $data
-    ): Rule {
-        //if operation is null: it has to be a single Rule
-        if (count($children) === 0) {
-            return $this->buildLeafRule($ruleName, $data, $operation);
-        }
-
-        $tmpRules = [];
-        foreach ($children as $child) {
-            $tmpRules[] = $this->buildRule($child['operation'], $child['name'], $child['children'], $child['data']);
-        }
-
-        $operation = strtolower($operation);
-
-        return Rule::$operation(
-            ...$tmpRules
-        );
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws TreeBuilderException
-     */
-    private function buildLeafRule(string $ruleName, array $data, ?string $operation): Rule
-    {
-        foreach ($this->availableRules as $rule) {
-            /**
-             * @var BaseValidationRule $ruleInstance
-             */
-            $reflection = new ReflectionClass($rule);
-            $ruleInstance = $reflection->newInstance([]);
-            if ($ruleInstance->normalizedKey() === $ruleName) {
-                $ruleMethod = 'single';
-                if ($operation === Node::OPERATION_NOT) {
-                    $ruleMethod = 'not';
-                }
-
-                return Rule::$ruleMethod(get_class($ruleInstance), $data);
-            }
-        }
-
-        throw new TreeBuilderException(
-            sprintf(
-                'Cannot build leaf node for [%s]',
-                $ruleName
-            ),
-            500
-        );
     }
 
     private function isSingleRule(array $data): bool
@@ -227,7 +127,7 @@ class TreeBuilder
     private function checkType(array $rules): void
     {
         $validTypes = ['leaf', 'node'];
-        if (!isset($rules['type']) || !in_array($rules['type'], $validTypes)) {
+        if (! isset($rules['type']) || ! in_array($rules['type'], $validTypes)) {
             throw new Exception("Invalid or missing 'type' value. Must be either 'leaf' or 'node'.");
         }
     }
@@ -237,7 +137,7 @@ class TreeBuilder
      */
     private function checkLeaf(array $rules): void
     {
-        if (!isset($rules['data']) || !is_array($rules['data'])) {
+        if (! isset($rules['data']) || ! is_array($rules['data'])) {
             throw new Exception("'data' must be an array for 'leaf' type.");
         }
 
@@ -245,11 +145,11 @@ class TreeBuilder
             throw new Exception("'operation' must be null for 'leaf' type.");
         }
 
-        if (!empty($rules['children'])) {
+        if (! empty($rules['children'])) {
             throw new Exception("'children' must be an empty array for 'leaf' type.");
         }
 
-        if (!isset($rules['name']) || !is_string($rules['name'])) {
+        if (! isset($rules['name']) || ! is_string($rules['name'])) {
             throw new Exception("'name' must be a string for 'leaf' type.");
         }
     }
@@ -263,7 +163,7 @@ class TreeBuilder
             throw new Exception("'data' must be null for 'node' type.");
         }
 
-        if (!isset($rules['children']) || !is_array($rules['children'])) {
+        if (! isset($rules['children']) || ! is_array($rules['children'])) {
             throw new Exception("'children' must be an array for 'node' type.");
         }
 
@@ -271,7 +171,7 @@ class TreeBuilder
             throw new Exception("'name' must be null for 'node' type.");
         }
 
-        if (!isset($rules['operation'])) {
+        if (! isset($rules['operation'])) {
             throw new Exception("'operation' must not be null for 'node' type.");
         }
 

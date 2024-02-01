@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Jkbennemann\BusinessRequirements;
 
+use Illuminate\Foundation\Application;
 use Jkbennemann\BusinessRequirements\Commands\CreatePayloadCommand;
 use Jkbennemann\BusinessRequirements\Commands\CreateRuleCommand;
+use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
+use Jkbennemann\BusinessRequirements\Core\Rule;
+use Jkbennemann\BusinessRequirements\Core\RuleParser;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
@@ -32,6 +36,24 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
             $class = $app['config']['validate-business-requirements']['validation_data_builder'] ?? ValidationDataBuilder::class;
 
             return new $class();
+        });
+
+        $this->app->bind(RuleParser::class, function ($app) {
+            $availableRules = $app['config']['validate-business-requirements']['available_rules'] ?? [];
+
+            return new RuleParser($availableRules);
+        });
+
+        $this->app->bind(RuleParserContract::class, function (Application $app) {
+            $class = $app['config']['validate-business-requirements']['rule_parser'] ?? RuleParser::class;
+
+            return $app->make($class);
+        });
+
+        $this->app->bind(Rule::class, function (Application $app) {
+            $parser = $app->make(RuleParserContract::class);
+
+            return new Rule($parser);
         });
 
         $this->app->bind(BaseValidator::class, function ($app) {

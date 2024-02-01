@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Jkbennemann\BusinessRequirements\Core\Node;
 use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
-use Jkbennemann\BusinessRequirements\Core\Rule;
+use Jkbennemann\BusinessRequirements\Core\Rule as RuleAlias;
+use Jkbennemann\BusinessRequirements\Core\RuleParser;
 use Jkbennemann\BusinessRequirements\Core\TreeBuilder;
 use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+use Jkbennemann\BusinessRequirements\Facades\Rule;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
 
@@ -15,7 +16,7 @@ it('can build an empty tree structure', function () {
     $rule = Rule::empty();
 
     expect($rule)
-        ->toBeInstanceOf(Rule::class)
+        ->toBeInstanceOf(RuleAlias::class)
         ->and($rule->node())
         ->toBeInstanceOf(Node::class)
         ->and($rule->node()->isEmpty())
@@ -30,7 +31,7 @@ it('can build a simple tree structure with a single rule', function () {
     $ruleData = $rule->toArray();
 
     expect($rule)
-        ->toBeInstanceOf(Rule::class)
+        ->toBeInstanceOf(RuleAlias::class)
         ->and($rule->node())
         ->toBeInstanceOf(Node::class)
         ->and($ruleData)
@@ -53,7 +54,7 @@ it('can build a simple tree structure with a negated single rule', function () {
     $ruleData = $rule->toArray();
 
     expect($rule)
-        ->toBeInstanceOf(Rule::class)
+        ->toBeInstanceOf(RuleAlias::class)
         ->and($rule->node())
         ->toBeInstanceOf(Node::class)
         ->and($ruleData)
@@ -104,7 +105,7 @@ it('can build a simple tree structure with multiple rules - syntax 1', function 
     $ruleData = $rule->toArray();
 
     expect($rule)
-        ->toBeInstanceOf(Rule::class)
+        ->toBeInstanceOf(RuleAlias::class)
         ->and($rule->node())
         ->toBeInstanceOf(Node::class)
         ->and($ruleData)
@@ -148,7 +149,7 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
     $ruleData = $rule->toArray();
 
     expect($rule)
-        ->toBeInstanceOf(Rule::class)
+        ->toBeInstanceOf(RuleAlias::class)
         ->and($rule->node())
         ->toBeInstanceOf(Node::class)
         ->and($ruleData)
@@ -181,13 +182,13 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
 });
 
 it('can build a tree structure from a json string', function () {
-    config()->set('validate-business-requirements.available_rules', [
-        RuleOne::class,
-        RuleTwo::class,
-    ]);
-
     $json = '{"children":[{"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"},{"children":[],"data":{"bar":"baz"},"name":"rule_2","operation":null,"type":"leaf"}],"data":null,"name":null,"operation":"AND","type":"node"}';
-    $builder = new TreeBuilder();
+    $builder = new TreeBuilder(
+        new RuleParser([
+            RuleOne::class,
+            RuleTwo::class,
+        ])
+    );
     $tree = $builder->build(json_decode($json, true));
 
     expect($tree)
@@ -225,7 +226,7 @@ it('can build a tree structure from a json string', function () {
 
 it('cannot build a tree for a non existing rule', function () {
     Rule::single('not-existing', []);
-})->throws(BindingResolutionException::class);
+})->throws(RuleValidation::class);
 
 it('cannot build a tree for a not enabled but existing rule', function () {
     Rule::single(RuleOne::class, []);
