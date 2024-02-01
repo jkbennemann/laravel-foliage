@@ -32,7 +32,7 @@ class Node implements Arrayable, JsonSerializable
 
     public ?string $operation = null;
 
-    public function __construct(private readonly BaseValidator $validator)
+    public function __construct()
     {
         $this->children = new Collection();
     }
@@ -65,15 +65,6 @@ class Node implements Arrayable, JsonSerializable
         ksort($data);
 
         return $data;
-    }
-
-    public function validate(BaseValidationPayload|array $payload): void
-    {
-        if ($payload instanceof BaseValidationPayload) {
-            $payload = $payload->toArray();
-        }
-
-        $this->validator->evaluate($this, $payload);
     }
 
     public function rulesFlattened(): Collection

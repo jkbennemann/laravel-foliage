@@ -28,7 +28,9 @@ class TreeBuilder
      */
     public function build(array $rules): Node
     {
-        $root = resolve(Node::class);
+        $this->validate($rules);
+
+        $root = new Node();
 
         if ($this->isSingleRule($rules)) {
             $rules = [$rules];
@@ -198,5 +200,83 @@ class TreeBuilder
     private function isSingleRule(array $data): bool
     {
         return array_key_exists('name', $data);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function validate(array $rules): void
+    {
+        if (isset($rules['children']) && is_array($rules['children'])) {
+            foreach ($rules['children'] as $child) {
+                $this->validate($child);
+            }
+        } else {
+            $this->checkType($rules);
+            if ($rules['type'] === 'leaf') {
+                $this->checkLeaf($rules);
+            } elseif ($rules['type'] === 'node') {
+                $this->checkNode($rules);
+            }
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkType(array $rules): void
+    {
+        $validTypes = ['leaf', 'node'];
+        if (!isset($rules['type']) || !in_array($rules['type'], $validTypes)) {
+            throw new Exception("Invalid or missing 'type' value. Must be either 'leaf' or 'node'.");
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkLeaf(array $rules): void
+    {
+        if (!isset($rules['data']) || !is_array($rules['data'])) {
+            throw new Exception("'data' must be an array for 'leaf' type.");
+        }
+
+        if (isset($rules['operation'])) {
+            throw new Exception("'operation' must be null for 'leaf' type.");
+        }
+
+        if (!empty($rules['children'])) {
+            throw new Exception("'children' must be an empty array for 'leaf' type.");
+        }
+
+        if (!isset($rules['name']) || !is_string($rules['name'])) {
+            throw new Exception("'name' must be a string for 'leaf' type.");
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkNode(array $rules): void
+    {
+        if (isset($rules['data'])) {
+            throw new Exception("'data' must be null for 'node' type.");
+        }
+
+        if (!isset($rules['children']) || !is_array($rules['children'])) {
+            throw new Exception("'children' must be an array for 'node' type.");
+        }
+
+        if (isset($rules['name'])) {
+            throw new Exception("'name' must be null for 'node' type.");
+        }
+
+        if (!isset($rules['operation'])) {
+            throw new Exception("'operation' must not be null for 'node' type.");
+        }
+
+        foreach ($rules['children'] as $child) {
+            $this->validate($child);
+        }
     }
 }
