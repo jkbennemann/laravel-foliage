@@ -80,7 +80,8 @@
                 "Jkbennemann\\BusinessRequirements\\BusinessRequirementsServiceProvider"
             ],
             "aliases": {
-                "BusinessRequirements": "Jkbennemann\\BusinessRequirements\\Facades\\BusinessRequirements"
+                "BusinessRequirements": "Jkbennemann\\BusinessRequirements\\Facades\\BusinessRequirements",
+                "Rule": "Jkbennemann\\BusinessRequirements\\Facades\\Rule"
             }
         }
     },

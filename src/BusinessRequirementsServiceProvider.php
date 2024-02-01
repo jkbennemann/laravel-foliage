@@ -50,12 +50,6 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
             return $app->make($class);
         });
 
-        $this->app->bind(Rule::class, function (Application $app) {
-            $parser = $app->make(RuleParserContract::class);
-
-            return new Rule($parser);
-        });
-
         $this->app->bind(BaseValidator::class, function ($app) {
             return new TreeValidator($app->make(ValidationDataContract::class));
         });
