@@ -11,9 +11,7 @@ use Throwable;
 
 abstract class BaseValidationRule
 {
-    public function __construct(protected array $data = [])
-    {
-    }
+    protected array $data = [];
 
     public function setSettings(array $data): void
     {

@@ -19,7 +19,10 @@ it('can build validation for an array payload class', function () {
         ->and($payload->toArray())
         ->toMatchArray(['foo' => 'bar', 'bar' => 'baz']);
 
-    $payload = $builder->build(new RuleOne(['foo' => 'bar']), $payloadData);
+    $rule = $this->app->make(RuleOne::class);
+    $rule->setSettings(['foo' => 'bar']);
+
+    $payload = $builder->build($rule, $payloadData);
 
     expect($payload)
         ->toBeInstanceOf(ArrayPayload::class)
@@ -39,7 +42,7 @@ it('can build validation for an date availability payload class', function () {
         ->and($payload->toArray())
         ->toMatchArray(['from' => $currentTime->toIso8601String(), 'until' => $currentTime->toIso8601String()]);
 
-    $payload = $builder->build(new DateAvailabilityRule([]), $payloadData);
+    $payload = $builder->build(new DateAvailabilityRule(), $payloadData);
 
     expect($payload)
         ->toBeInstanceOf(DateAvailabilityPayloadBase::class)
@@ -47,7 +50,7 @@ it('can build validation for an date availability payload class', function () {
         ->toMatchArray(['from' => $currentTime->toIso8601String(), 'until' => $currentTime->toIso8601String()]);
 
     $payload = $builder->build(
-        new DateAvailabilityRule([]),
+        new DateAvailabilityRule(),
         ['from' => $currentTime]
     );
 

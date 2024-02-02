@@ -43,7 +43,7 @@ class ValidationDataBuilder implements ValidationDataContract
             throw new Exception('Invalid argument for `$rule` specified. Your class needs to extend the BaseValidationRule class');
         }
 
-        return $reflection->newInstance([]);
+        return resolve($rule);
 
     }
 
