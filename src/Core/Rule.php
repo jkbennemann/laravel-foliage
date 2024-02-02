@@ -27,7 +27,7 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public function single(string $rule, array|BaseValidationPayload $data, ?Node $parent = null): Rule
+    public function single(string $rule, array|BaseValidationPayload $data = [], ?Node $parent = null): Rule
     {
         $rule = $this->ruleParser->parse($rule);
         /**
@@ -67,7 +67,7 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public function not(string $rule, array|BaseValidationPayload $data): Rule
+    public function not(string $rule, array|BaseValidationPayload $data = []): Rule
     {
         $rule = $this->single($rule, $data);
         $rule->node->operation = Node::OPERATION_NOT;
