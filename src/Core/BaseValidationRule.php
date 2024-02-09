@@ -55,6 +55,8 @@ abstract class BaseValidationRule
         if ($negate) {
             try {
                 $this->validation($payload);
+
+                $this->validationInverse($payload);
             } catch (RuleValidation) {
                 //it's fine as rule is inverse and is supposed to fail
                 return;
@@ -64,6 +66,19 @@ abstract class BaseValidationRule
         }
 
         $this->validation($payload);
+    }
+
+    /**
+     * If a rule does not always can be considered a strict logical not
+     * you can specify different behaviour for that here.
+     *
+     * @param  BaseValidationPayload  $payload  data to validate against
+     *
+     * @throws RuleValidation exception
+     */
+    protected function validationInverse(BaseValidationPayload $payload): void
+    {
+        //
     }
 
     /**
