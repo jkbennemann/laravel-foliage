@@ -46,9 +46,11 @@ abstract class BaseValidator
 
     public function errors(): Collection
     {
-        return $this->validationErrors->unique(function (RuleValidation $error) {
-            return $error->failedRule()->normalizedKey();
-        });
+        return $this->validationErrors
+            ->filter()
+            ->unique(function (RuleValidation $error) {
+                return $error->failedRule()?->normalizedKey() ?: 'generic';
+            });
     }
 
     public function isValid(): bool

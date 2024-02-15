@@ -11,6 +11,8 @@ use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionParameter;
+use Throwable;
 
 class ValidationDataBuilder implements ValidationDataContract
 {
@@ -18,12 +20,12 @@ class ValidationDataBuilder implements ValidationDataContract
      * @throws ReflectionException
      * @throws Exception
      */
-    public function build(BaseValidationRule|string $rule, array $payload): BaseValidationPayload
+    public function build(BaseValidationRule|string $rule, array $payload, ?string $alias = null): BaseValidationPayload
     {
         /** @var BaseValidationRule $rule */
         $rule = $this->getRuleInstance($rule);
 
-        return $this->composePayloadInstance($rule, $payload);
+        return $this->composePayloadInstance($rule, $payload, $alias);
     }
 
     /**
@@ -49,13 +51,41 @@ class ValidationDataBuilder implements ValidationDataContract
 
     private function composePayloadInstance(
         BaseValidationRule $rule,
-        array $payload
+        array $payload,
+        ?string $alias
     ): BaseValidationPayload {
         //all payloads use Spatie's Data package
-        if ($rule->payloadObjectClass() === ArrayPayload::class) {
+        try {
+            if ($rule->payloadObjectClass() === ArrayPayload::class) {
+                return ArrayPayload::from(['data' => $payload]);
+            } else {
+                $payloadClass = $rule->payloadObjectClass();
+
+                if ($alias && array_key_exists($alias, $payload)) {
+                    $payloadClassParameters = $this->getPayloadParameters($payloadClass);
+
+                    if (count($payloadClassParameters) === 1) {
+                        $payload[$payloadClassParameters[0]] = $payload[$alias] ?? [];
+                    }
+                }
+
+                return $rule->payloadObjectClass()::from($payload);
+            }
+        } catch (Throwable) {
             return ArrayPayload::from(['data' => $payload]);
-        } else {
-            return $rule->payloadObjectClass()::from($payload);
         }
+    }
+
+    private function getPayloadParameters(string $payloadClass): array
+    {
+        $reflection = new ReflectionClass($payloadClass);
+        $parameters = $reflection->getConstructor()->getParameters();
+
+        return collect($parameters)
+            ->map(function (ReflectionParameter $param) {
+                return $param->getName();
+            })
+            ->flatten()
+            ->toArray();
     }
 }

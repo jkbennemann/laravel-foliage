@@ -9,5 +9,5 @@ use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
 
 interface ValidationDataContract
 {
-    public function build(BaseValidationRule|string $rule, array $payload): BaseValidationPayload;
+    public function build(BaseValidationRule|string $rule, array $payload, ?string $alias = null): BaseValidationPayload;
 }

@@ -74,7 +74,7 @@ it('can build a json tree structure with a single rule - syntax 1', function () 
         RuleOne::class,
     ]);
     $rule = Rule::single(RuleOne::class, ['foo' => 'bar']);
-    $json = '{"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"}';
+    $json = '{"alias":null,"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"}';
 
     expect($rule->jsonSerialize())
         ->toBe($json);
@@ -87,7 +87,7 @@ it('can build a json tree structure with a single rule - syntax 2', function () 
     $rule = Rule::single(RuleOne::class, new ArrayPayload([
         'foo' => 'bar',
     ]));
-    $json = '{"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"}';
+    $json = '{"alias":null,"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"}';
 
     expect($rule->jsonSerialize())
         ->toBe($json);
@@ -110,8 +110,10 @@ it('can build a simple tree structure with multiple rules - syntax 1', function 
         ->toBeInstanceOf(Node::class)
         ->and($ruleData)
         ->toMatchArray([
+            'alias' => null,
             'children' => [
                 [
+                    'alias' => null,
                     'children' => [],
                     'data' => [
                         'foo' => 'bar',
@@ -121,6 +123,7 @@ it('can build a simple tree structure with multiple rules - syntax 1', function 
                     'type' => 'leaf',
                 ],
                 [
+                    'alias' => null,
                     'children' => [],
                     'data' => [
                         'bar' => 'baz',
@@ -154,8 +157,10 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
         ->toBeInstanceOf(Node::class)
         ->and($ruleData)
         ->toMatchArray([
+            'alias' => null,
             'children' => [
                 [
+                    'alias' => null,
                     'children' => [],
                     'data' => [
                         'foo' => 'bar',
@@ -165,6 +170,7 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
                     'type' => 'leaf',
                 ],
                 [
+                    'alias' => null,
                     'children' => [],
                     'data' => [
                         'bar' => 'baz',
@@ -182,7 +188,7 @@ it('can build a simple tree structure with multiple rules - syntax 2', function 
 });
 
 it('can build a tree structure from a json string', function () {
-    $json = '{"children":[{"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"},{"children":[],"data":{"bar":"baz"},"name":"rule_2","operation":null,"type":"leaf"}],"data":null,"name":null,"operation":"AND","type":"node"}';
+    $json = '{"alias":null,"children":[{"alias":null,"children":[],"data":{"foo":"bar"},"name":"rule_1","operation":null,"type":"leaf"},{"alias":null,"children":[],"data":{"bar":"baz"},"name":"rule_2","operation":null,"type":"leaf"}],"data":null,"name":null,"operation":"AND","type":"node"}';
     $builder = new TreeBuilder(
         new RuleParser([
             RuleOne::class,
@@ -197,8 +203,10 @@ it('can build a tree structure from a json string', function () {
         ->toBe($json)
         ->and($tree->toArray())
         ->toMatchArray([
+            'alias' => null,
             'children' => [
                 [
+                    'alias' => null,
                     'children' => [],
                     'data' => [
                         'foo' => 'bar',
@@ -208,6 +216,7 @@ it('can build a tree structure from a json string', function () {
                     'type' => 'leaf',
                 ],
                 [
+                    'alias' => null,
                     'children' => [],
                     'data' => [
                         'bar' => 'baz',

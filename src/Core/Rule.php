@@ -75,6 +75,15 @@ class Rule
         return $rule;
     }
 
+    public function alias(?string $alias = null): Rule
+    {
+        if ($this->node()->isLeaf) {
+            $this->node()->setAlias($alias);
+        }
+
+        return $this;
+    }
+
     public function empty(): Rule
     {
         return new Rule($this->ruleParser);

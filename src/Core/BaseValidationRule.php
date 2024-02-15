@@ -43,7 +43,7 @@ abstract class BaseValidationRule
         } catch (RuleValidation $specificRuleException) {
             throw $specificRuleException;
         } catch (Throwable) {
-            throw RuleValidation::unexpected();
+            throw RuleValidation::unexpectedMismatch($this);
         }
     }
 

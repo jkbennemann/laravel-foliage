@@ -48,6 +48,11 @@ class RuleValidation extends Exception
         return new RuleValidation($rule, 'Unexpected error during validation', null, 'generic_error');
     }
 
+    public static function unexpectedMismatch(?BaseValidationRule $rule = null): RuleValidation
+    {
+        return new RuleValidation($rule, 'Unexpected error during validation. Probably payload is not valid', null, 'generic_error_missmatch');
+    }
+
     public static function notEnabled(?BaseValidationRule $rule = null): RuleValidation
     {
         if (! $rule) {
@@ -55,6 +60,11 @@ class RuleValidation extends Exception
         }
 
         return new RuleValidation($rule, sprintf('Rule [%s] is not enabled', $rule->normalizedKey()), null, 'not_enabled');
+    }
+
+    public static function invalidRule(string $rule): RuleValidation
+    {
+        return new RuleValidation(null, sprintf('Rule [%s] is invalid', $rule), null, 'invalid');
     }
 
     final public function exceptionKey(): string

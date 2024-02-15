@@ -294,5 +294,29 @@ it('can validate a multi-level disjunction rule with custom payloads silently - 
         ->toBeFalse()
         ->and($validator->errors())
         ->toHaveCount(3);
-
 });
+
+
+it('can validate xxx', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        UserHasPermissionRule::class,
+        UserIsAdminRule::class,
+    ]);
+
+    $payload = [
+        'permissions' => ['permission_1'],
+        'permissions_user_2' => ['permission_2'],
+        'is_admin' => true,
+    ];
+
+    $node = Rule::and(
+        Rule::single(UserHasPermissionRule::class, ['permission_1']),
+        Rule::and(
+            Rule::single(UserIsAdminRule::class, []),
+            Rule::single(UserHasPermissionRule::class, ['permission_2'])->alias('permissions_user_2'),
+        )
+    )->node();
+
+    $validator = new TreeValidator(new ValidationDataBuilder());
+    $validator->evaluate($node, $payload);
+})->expectNotToPerformAssertions();

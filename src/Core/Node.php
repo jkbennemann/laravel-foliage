@@ -30,6 +30,8 @@ class Node implements Arrayable, JsonSerializable
 
     public ?string $operation = null;
 
+    public ?string $alias = null;
+
     public function __construct()
     {
         $this->children = new Collection();
@@ -38,6 +40,13 @@ class Node implements Arrayable, JsonSerializable
     public function addChild(self $child): self
     {
         $this->children->push($child);
+
+        return $this;
+    }
+
+    public function setAlias(?string $alias = null): self
+    {
+        $this->alias = $alias;
 
         return $this;
     }
@@ -53,6 +62,7 @@ class Node implements Arrayable, JsonSerializable
     public function toArray(): array
     {
         $data = [
+            'alias' => $this->alias,
             'type' => $this->isLeaf ? self::TYPE_LEAF : self::TYPE_NODE,
             'operation' => $this->operation,
             'name' => $this->rule?->normalizedKey(),

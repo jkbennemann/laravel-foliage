@@ -31,7 +31,7 @@ class TreeValidator extends BaseValidator
     private function evaluateLeaf(Node $leafNode, array $payload): bool
     {
         $rule = $leafNode->rule;
-        $validationPayload = $this->payloadBuilder->build($rule, $payload);
+        $validationPayload = $this->payloadBuilder->build($rule, $payload, $leafNode->alias);
 
         $validationPayload->setUpdate($payload['is_update'] ?? false);
 
