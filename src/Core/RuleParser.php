@@ -61,7 +61,7 @@ class RuleParser implements RuleParserContract
         try {
             $rule = new ReflectionClass($ruleName);
 
-            $rule =  $this->getRuleInstance($rule);
+            $rule = $this->getRuleInstance($rule);
 
             if (! $rule instanceof BaseValidationRule) {
                 return $ruleName;

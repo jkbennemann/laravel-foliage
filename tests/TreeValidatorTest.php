@@ -296,8 +296,7 @@ it('can validate a multi-level disjunction rule with custom payloads silently - 
         ->toHaveCount(3);
 });
 
-
-it('can validate xxx', function () {
+it('can validate permissions with aliased payload', function () {
     config()->set('validate-business-requirements.available_rules', [
         UserHasPermissionRule::class,
         UserIsAdminRule::class,
