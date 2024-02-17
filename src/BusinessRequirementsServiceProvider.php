@@ -11,6 +11,8 @@ use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
 use Jkbennemann\BusinessRequirements\Core\RuleParser;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
+use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationStrategy;
+use Jkbennemann\BusinessRequirements\Validator\Strategies\SimpleEvaluator;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
 use Spatie\LaravelPackageTools\Package;
@@ -37,6 +39,10 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
             return new $class();
         });
 
+        $this->app->bind(ValidationStrategy::class, function ($app) {
+            return new SimpleEvaluator();
+        });
+
         $this->app->bind(RuleParser::class, function ($app) {
             $availableRules = $app['config']['validate-business-requirements']['available_rules'] ?? [];
 
@@ -50,7 +56,10 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
         });
 
         $this->app->bind(BaseValidator::class, function ($app) {
-            return new TreeValidator($app->make(ValidationDataContract::class));
+            return new TreeValidator(
+                $app->make(ValidationDataContract::class),
+                $app->make(ValidationStrategy::class),
+            );
         });
 
     }
