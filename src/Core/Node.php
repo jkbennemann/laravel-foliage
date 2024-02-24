@@ -160,6 +160,26 @@ class Node implements Arrayable, JsonSerializable
         return json_encode($this->toArray());
     }
 
+    public function isBinary(): bool
+    {
+        if ($this->isLeaf) {
+            return true;
+        }
+
+        if ($this->children->count() > 2) {
+            return false;
+        }
+
+        /** @var Node $child */
+        foreach ($this->children as $child) {
+            if (!$child->isBinary()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function findIncompleteNode(Collection $children): ?Node
     {
         /** @var Node $childNode */

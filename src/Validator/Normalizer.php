@@ -12,12 +12,19 @@ class Normalizer
 {
     public function normalize(Rule $rule): Rule
     {
-        if ($rule->node()->isLeaf) {
+        $node = $rule->rawNode();
+
+        if ($node->isBinary()) {
+            $rule = app(Rule::class);
+            return $rule->fromNode($node);
+        }
+
+        if ($node->isLeaf) {
             return $rule;
         }
 
-        $children = clone $rule->node()->children;
-        $baseOperation = $rule->node()->operation;
+        $children = clone $node->children;
+        $baseOperation = $node->operation;
 
         $groupedByOperation = $children->groupBy(function (Node $node) {
             return $node->operation;
@@ -57,7 +64,7 @@ class Normalizer
                 );
             });
 
-        return $this->buildRule($chunkedTrees, $rule->node()->operation);
+        return $this->buildRule($chunkedTrees, $node->operation);
     }
 
     private function buildRule(Collection $chunked, ?string $operation): Rule

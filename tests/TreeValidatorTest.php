@@ -156,6 +156,7 @@ it('can validate a multi-level disjunction rule', function () {
         Rule::and(
             [RuleTwo::class, ['bar' => 'baz']],
             [RuleOne::class, ['foo' => 'barz']],
+            [RuleOne::class, ['foo' => 'barz']],
         )
     );
 
