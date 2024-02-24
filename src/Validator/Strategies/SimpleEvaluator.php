@@ -40,7 +40,7 @@ class SimpleEvaluator extends ValidationStrategy
     /**
      * @throws RuleValidation|Exception
      */
-    public function evaluateNode(Node $node, array $payload): bool
+    public function evaluateNode(Node $node, array $payload, ?Node $parent): bool
     {
         if ($node->isLeaf) {
             try {
@@ -68,13 +68,9 @@ class SimpleEvaluator extends ValidationStrategy
         $childrenResult = true;
         /** @var Node $childNode */
         foreach ($node->children as $childNode) {
-            //TODO: extract the following code into a strategy
-            //$strategy = $operationFactory->make($node->operation);
-            //$result = $strategy->execute($childNode, $payload);
-
             if ($node->operation === Node::OPERATION_AND) {
                 try {
-                    $isValid = $this->evaluateNode($childNode, $payload);
+                    $isValid = $this->evaluateNode($childNode, $payload, null);
 
                     if (! $isValid) {
                         $childrenResult = false;
@@ -90,7 +86,7 @@ class SimpleEvaluator extends ValidationStrategy
                 $disjunctionRules++;
 
                 try {
-                    $childrenResult = $this->evaluateNode($childNode, $payload);
+                    $childrenResult = $this->evaluateNode($childNode, $payload, null);
 
                     if (! $childrenResult) {
                         $disjunctionRulesFailed++;
@@ -118,6 +114,5 @@ class SimpleEvaluator extends ValidationStrategy
         }
 
         return false;
-
     }
 }

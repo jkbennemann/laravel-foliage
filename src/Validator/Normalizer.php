@@ -144,6 +144,10 @@ class Normalizer
 
     private function fillTree(Node $tree, Collection $nodes): Node
     {
+        if ($nodes->count() == 1) {
+            return $nodes->get(0);
+        }
+
         /** @var Node $node */
         foreach ($nodes as $node) {
             $leaf = $this->findEmptyLeaf($tree);

@@ -65,5 +65,5 @@ abstract class ValidationStrategy
     /**
      * @throws RuleValidation
      */
-    abstract public function evaluateNode(Node $node, array $payload);
+    abstract public function evaluateNode(Node $node, array $payload, ?Node $parent);
 }

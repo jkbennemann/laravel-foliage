@@ -9,6 +9,7 @@ use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
 use Jkbennemann\BusinessRequirements\Tests\Rules\UserHasPermissionRule;
 use Jkbennemann\BusinessRequirements\Tests\Rules\UserIsAdminRule;
+use Jkbennemann\BusinessRequirements\Validator\Strategies\PostOrderEvaluator;
 use Jkbennemann\BusinessRequirements\Validator\Strategies\SimpleEvaluator;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
@@ -147,16 +148,19 @@ it('can validate a multi-level disjunction rule', function () {
         RuleTwo::class,
     ]);
 
-    $node = Rule::or(
-        Rule::single(RuleOne::class, ['foo' => 'not-bar']),
+    $rule = Rule::or(
+        Rule::single(RuleOne::class, ['foo' => 'bar']),
         Rule::and(
-            [RuleOne::class, ['foo' => 'bar']],
             [RuleTwo::class, ['bar' => 'baz']],
+            [RuleOne::class, ['foo' => 'barz']],
         )
-    )->node();
+    );
 
-    $validator = new TreeValidator(new ValidationDataBuilder(), new SimpleEvaluator());
-    $validator->evaluate($node, ['foo' => 'bar', 'bar' => 'baz']);
+    $normalizer = new \Jkbennemann\BusinessRequirements\Validator\Normalizer();
+    $node = $normalizer->normalize($rule)->node();
+
+    $validator = new TreeValidator(new ValidationDataBuilder(), new PostOrderEvaluator());
+    $validator->evaluate($node, ['foo' => 'barz', 'bar' => 'baz']);
 })->expectNotToPerformAssertions();
 
 it('can validate a multi-level conjunction rule', function () {

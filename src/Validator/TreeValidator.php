@@ -19,6 +19,6 @@ class TreeValidator extends BaseValidator
             return true;
         }
 
-        return $this->strategy->evaluateNode($rootNode, $payload);
+        return $this->strategy->evaluateNode($rootNode, $payload, null);
     }
 }
