@@ -7,6 +7,62 @@ use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
 use Jkbennemann\BusinessRequirements\Validator\Normalizer;
 
+it('can normalize a single rule', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        RuleOne::class,
+    ]);
+
+    $rule = Rule::single(RuleOne::class);
+
+    $normalizer = new Normalizer();
+    $node = $normalizer->normalize($rule);
+    $treeData = $node->toArray();
+    $totalRules = $node->node()->rulesFlattened()->count();
+
+    expect($treeData)
+        ->toHaveCount(6)
+        ->and($treeData['children'])
+        ->toHaveCount(0)
+        ->and($treeData['type'])
+        ->toBe('leaf')
+        ->and($treeData['operation'])
+        ->toBe(null)
+        ->and($treeData['data'])
+        ->toBe([])
+        ->and($treeData['name'])
+        ->toBe('rule_1')
+        ->and($totalRules)
+        ->toBe(1);
+});
+
+it('can normalize a single not rule', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        RuleOne::class,
+    ]);
+
+    $rule = Rule::not(RuleOne::class);
+
+    $normalizer = new Normalizer();
+    $node = $normalizer->normalize($rule);
+    $treeData = $node->toArray();
+    $totalRules = $node->node()->rulesFlattened()->count();
+
+    expect($treeData)
+        ->toHaveCount(6)
+        ->and($treeData['children'])
+        ->toHaveCount(0)
+        ->and($treeData['type'])
+        ->toBe('leaf')
+        ->and($treeData['operation'])
+        ->toBe('NOT')
+        ->and($treeData['data'])
+        ->toBe([])
+        ->and($treeData['name'])
+        ->toBe('rule_1')
+        ->and($totalRules)
+        ->toBe(1);
+});
+
 it('can normalize a conjunction rule with two single rules', function () {
     config()->set('validate-business-requirements.available_rules', [
         RuleOne::class,

@@ -12,6 +12,10 @@ class Normalizer
 {
     public function normalize(Rule $rule): Rule
     {
+        if ($rule->node()->isLeaf) {
+            return $rule;
+        }
+
         $children = clone $rule->node()->children;
         $baseOperation = $rule->node()->operation;
 
