@@ -19,7 +19,7 @@ class Normalizer
             return $node->operation;
         });
 
-        if ($groupedByOperation->has(Node::OPERATION_NOT) && !$groupedByOperation->has('')) {
+        if ($groupedByOperation->has(Node::OPERATION_NOT) && ! $groupedByOperation->has('')) {
             $groupedByOperation->put('', $groupedByOperation->get(Node::OPERATION_NOT));
             $groupedByOperation->forget(Node::OPERATION_NOT);
         }
@@ -36,13 +36,14 @@ class Normalizer
                 $neededNodes = $this->getNeededNodes($rulesCount);
 
                 $items = $this->flattenRuleNodes($items, $operation);
+
                 return [
                     'nodes' => $items,
                     'tree_template' => $this->createBaseTree(
                         $neededNodes,
                         $operation,
                         $baseOperation
-                    )
+                    ),
                 ];
             })
             ->map(function (array $data) {
@@ -168,7 +169,7 @@ class Normalizer
             }
         }
 
-        if (!$leaf && $tree->children->count() === 1) {
+        if (! $leaf && $tree->children->count() === 1) {
             return $tree;
         }
 

@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Jkbennemann\BusinessRequirements\Facades\Rule;
-use Jkbennemann\BusinessRequirements\Validator\Normalizer;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
+use Jkbennemann\BusinessRequirements\Validator\Normalizer;
 
 it('can normalize a conjunction rule with two single rules', function () {
     config()->set('validate-business-requirements.available_rules', [
