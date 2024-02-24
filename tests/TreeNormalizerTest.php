@@ -101,6 +101,39 @@ it('can normalize a conjunction rule with three single rules', function () {
         RuleTwo::class,
     ]);
 
+    $rule = Rule::or(
+        Rule::single(RuleOne::class, ['foo' => 'bar'])->alias('test'),
+        Rule::single(RuleTwo::class),
+        Rule::single(RuleTwo::class),
+    );
+
+    $normalizer = new Normalizer();
+    $node = $normalizer->normalize($rule);
+    $treeData = $node->toArray();
+    $totalRules = $node->node()->rulesFlattened()->count();
+
+    expect($treeData)
+        ->toHaveCount(6)
+        ->and($treeData['children'])
+        ->toHaveCount(2)
+        ->and($treeData['type'])
+        ->toBe('node')
+        ->and($treeData['operation'])
+        ->toBe('OR')
+        ->and($treeData['data'])
+        ->toBe(null)
+        ->and($treeData['name'])
+        ->toBe(null)
+        ->and($totalRules)
+        ->toBe(3);
+});
+
+it('can normalize a conjunction rule with all combination of rules', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        RuleOne::class,
+        RuleTwo::class,
+    ]);
+
     $rule = Rule::and(
         Rule::single(RuleOne::class, ['foo' => 'bar'])->alias('test'),
         Rule::single(RuleTwo::class),
