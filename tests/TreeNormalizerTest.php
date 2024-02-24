@@ -21,6 +21,7 @@ it('can normalize a conjunction rule with two single rules', function () {
     $normalizer = new Normalizer();
     $node = $normalizer->normalize($rule);
     $treeData = $node->toArray();
+    $totalRules = $node->node()->rulesFlattened()->count();
 
     expect($treeData)
         ->toHaveCount(6)
@@ -33,7 +34,9 @@ it('can normalize a conjunction rule with two single rules', function () {
         ->and($treeData['data'])
         ->toBe(null)
         ->and($treeData['name'])
-        ->toBe(null);
+        ->toBe(null)
+        ->and($totalRules)
+        ->toBe(2);
 });
 
 it('can normalize a conjunction rule with three single rules', function () {
@@ -66,6 +69,7 @@ it('can normalize a conjunction rule with three single rules', function () {
     $normalizer = new Normalizer();
     $node = $normalizer->normalize($rule);
     $treeData = $node->toArray();
+    $totalRules = $node->node()->rulesFlattened()->count();
 
     expect($treeData)
         ->toHaveCount(6)
@@ -78,5 +82,7 @@ it('can normalize a conjunction rule with three single rules', function () {
         ->and($treeData['data'])
         ->toBe(null)
         ->and($treeData['name'])
-        ->toBe(null);
+        ->toBe(null)
+        ->and($totalRules)
+        ->toBe(12);
 });
