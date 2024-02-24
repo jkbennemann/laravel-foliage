@@ -7,6 +7,34 @@ use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
 use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
 use Jkbennemann\BusinessRequirements\Validator\Normalizer;
 
+it('can normalize an empty rule', function () {
+    config()->set('validate-business-requirements.available_rules', [
+        RuleOne::class,
+    ]);
+
+    $rule = Rule::empty();
+
+    $normalizer = new Normalizer();
+    $node = $normalizer->normalize($rule);
+    $treeData = $node->toArray();
+    $totalRules = $node->node()->rulesFlattened()->count();
+
+    expect($treeData)
+        ->toHaveCount(6)
+        ->and($treeData['children'])
+        ->toHaveCount(0)
+        ->and($treeData['type'])
+        ->toBe('node')
+        ->and($treeData['operation'])
+        ->toBe(null)
+        ->and($treeData['data'])
+        ->toBe(null)
+        ->and($treeData['name'])
+        ->toBe(null)
+        ->and($totalRules)
+        ->toBe(0);
+});
+
 it('can normalize a single rule', function () {
     config()->set('validate-business-requirements.available_rules', [
         RuleOne::class,
