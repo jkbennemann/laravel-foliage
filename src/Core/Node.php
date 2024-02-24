@@ -99,6 +99,30 @@ class Node implements Arrayable, JsonSerializable
         return $rules;
     }
 
+    public function ruleNodes(self $node): Collection
+    {
+        $rules = collect();
+
+        if ($node->isLeaf) {
+            $rules->add($node);
+
+            return $rules;
+        }
+
+        /** @var Node $child */
+        foreach ($node->children as $child) {
+            if ($child->isLeaf) {
+                $rules->add($child);
+
+                continue;
+            }
+
+            $rules = $rules->merge($this->ruleNodes($child));
+        }
+
+        return $rules;
+    }
+
     public function getRule(string $rule, Node $parent): ?BaseValidationRule
     {
         if ($parent->isLeaf && $parent->rule instanceof $rule) {
@@ -114,8 +138,54 @@ class Node implements Arrayable, JsonSerializable
         return null;
     }
 
+    public function addNode(?string $operation): self
+    {
+        $tmpNode = app(Node::class);
+        $tmpNode->operation = $operation;
+
+        if ($this->children->isEmpty() || $this->children->count() === 1) {
+            $this->children->push($tmpNode);
+
+            return $this;
+        }
+
+        $child = $this->findIncompleteNode($this->children);
+        $child->children->push($tmpNode);
+
+        return $this;
+    }
+
     public function jsonSerialize(): string
     {
         return json_encode($this->toArray());
+    }
+
+    private function findIncompleteNode(Collection $children): ?Node
+    {
+        /** @var Node $childNode */
+        foreach ($children as $key => $childNode) {
+            if ($childNode->isLeaf) {
+                continue;
+            }
+
+            if ($childNode->children->isEmpty() || $childNode->children->count() === 1) {
+                return $childNode;
+            }
+
+            //children count is 2,
+            $childCountNextNode = $children->get($key+1)?->children->count();
+
+            if ($childCountNextNode !== null && $childCountNextNode < 2) {
+                continue;
+            }
+
+            $availableNode = $this->findIncompleteNode($childNode->children);
+
+            if ($availableNode) {
+                return $availableNode;
+            }
+        }
+
+        return null;
     }
 }

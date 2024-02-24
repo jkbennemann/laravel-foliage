@@ -27,9 +27,11 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public function single(string $rule, array|BaseValidationPayload $data = [], ?Node $parent = null): Rule
+    public function single(Rule|string $rule, array|BaseValidationPayload $data = [], ?Node $parent = null): Rule
     {
-        $rule = $this->ruleParser->parse($rule);
+        if (is_string($rule)) {
+            $rule = $this->ruleParser->parse($rule);
+        }
         /**
          * @var BaseValidationRule $rule
          */
