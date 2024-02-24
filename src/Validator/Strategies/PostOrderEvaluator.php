@@ -62,12 +62,20 @@ class PostOrderEvaluator extends ValidationStrategy
 
         try {
             $isValidLeft = $this->evaluateNode($node->children->get(0), $payload, $node);
+
+            $n = '';
         } catch (RuleValidation $exception) {
             $errors->push($exception);
         }
 
         try {
             $isValidRight = $this->evaluateNode($node->children->get(1), $payload, $node);
+
+            if ($isValidRight === false) {
+                foreach ($this->errors() as $error) {
+                    $errors->add($error);
+                }
+            }
         } catch (RuleValidation $exception) {
             $errors->push($exception);
         }
