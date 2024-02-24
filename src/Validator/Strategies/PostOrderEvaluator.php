@@ -101,6 +101,12 @@ class PostOrderEvaluator extends ValidationStrategy
 
                 return true;
             }
+
+            if ($result === false) {
+                foreach ($this->errors() as $error) {
+                    $errors->add($error);
+                }
+            }
         } catch (RuleValidation $exception) {
             $errors->push($exception);
         }
@@ -112,6 +118,12 @@ class PostOrderEvaluator extends ValidationStrategy
                 $this->validationErrors = collect();
 
                 return true;
+            }
+
+            if ($result === false) {
+                foreach ($this->errors() as $error) {
+                    $errors->add($error);
+                }
             }
         } catch (RuleValidation $exception) {
             $errors->push($exception);
