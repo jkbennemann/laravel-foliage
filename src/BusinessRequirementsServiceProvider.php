@@ -12,7 +12,7 @@ use Jkbennemann\BusinessRequirements\Core\RuleParser;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
 use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationStrategy;
-use Jkbennemann\BusinessRequirements\Validator\Strategies\SimpleEvaluator;
+use Jkbennemann\BusinessRequirements\Validator\Strategies\PostOrderEvaluator;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
 use Spatie\LaravelPackageTools\Package;
@@ -40,7 +40,7 @@ class BusinessRequirementsServiceProvider extends PackageServiceProvider
         });
 
         $this->app->bind(ValidationStrategy::class, function ($app) {
-            return new SimpleEvaluator();
+            return new PostOrderEvaluator();
         });
 
         $this->app->bind(RuleParser::class, function ($app) {
