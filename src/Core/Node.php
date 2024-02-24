@@ -172,7 +172,7 @@ class Node implements Arrayable, JsonSerializable
 
         /** @var Node $child */
         foreach ($this->children as $child) {
-            if (!$child->isBinary()) {
+            if (! $child->isBinary()) {
                 return false;
             }
         }

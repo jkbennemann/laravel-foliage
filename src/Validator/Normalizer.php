@@ -16,6 +16,7 @@ class Normalizer
 
         if ($node->isBinary()) {
             $rule = app(Rule::class);
+
             return $rule->fromNode($node);
         }
 

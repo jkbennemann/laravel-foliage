@@ -94,7 +94,7 @@ class Rule
 
     public function node(): Node
     {
-        if (!$this->node->isBinary()) {
+        if (! $this->node->isBinary()) {
             $normalizer = new Normalizer();
             $this->node = $normalizer->normalize(self::fromNode($this->node))->node;
         }
