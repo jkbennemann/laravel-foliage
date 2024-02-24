@@ -13,6 +13,14 @@ use Jkbennemann\BusinessRequirements\Validator\Strategies\SimpleEvaluator;
 use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
 use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
 
+it('can validate an empty rule', function () {
+    $node = Rule::empty()->node();
+
+    $validator = new TreeValidator(new ValidationDataBuilder(), new SimpleEvaluator());
+    expect($validator->evaluate($node, ['foo' => 'bar']))
+        ->toBeTrue();
+});
+
 it('can validate a simple rule', function () {
     config()->set('validate-business-requirements.available_rules', [
         RuleOne::class,
