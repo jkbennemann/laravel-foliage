@@ -173,7 +173,7 @@ class Node implements Arrayable, JsonSerializable
             }
 
             //children count is 2,
-            $childCountNextNode = $children->get($key+1)?->children->count();
+            $childCountNextNode = $children->get($key + 1)?->children->count();
 
             if ($childCountNextNode !== null && $childCountNextNode < 2) {
                 continue;
