@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
-use Jkbennemann\BusinessRequirements\Core\Payload\DateAvailabilityPayloadBase;
-use Jkbennemann\BusinessRequirements\Tests\Rules\DateAvailabilityRule;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
-use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
+use Jkbennemann\Foliage\Core\Payload\ArrayPayload;
+use Jkbennemann\Foliage\Core\Payload\DateAvailabilityPayloadBase;
+use Jkbennemann\Foliage\Tests\Rules\DateAvailabilityRule;
+use Jkbennemann\Foliage\Tests\Rules\RuleOne;
+use Jkbennemann\Foliage\Validator\ValidationDataBuilder;
 
 it('can build validation for an array payload class', function () {
     $payloadData = ['foo' => 'bar', 'bar' => 'baz'];

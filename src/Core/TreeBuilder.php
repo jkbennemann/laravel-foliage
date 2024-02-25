@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core;
+namespace Jkbennemann\Foliage\Core;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Core\Contracts\RuleParserContract;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
 use ReflectionException;
 
 class TreeBuilder

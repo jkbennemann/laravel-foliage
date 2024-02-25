@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core;
+namespace Jkbennemann\Foliage\Core;
 
-use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Core\Contracts\RuleParserContract;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
 use ReflectionClass;
 use ReflectionException;
 
@@ -13,11 +13,6 @@ class RuleParser implements RuleParserContract
 {
     public function __construct(private readonly array $availableRules)
     {
-    }
-
-    public function getAvailableRules(): array
-    {
-        return $this->availableRules;
     }
 
     /**

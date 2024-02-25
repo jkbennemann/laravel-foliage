@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements;
+namespace Jkbennemann\Foliage;
 
-use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Core\TreeBuilder;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
-use Jkbennemann\BusinessRequirements\Validator\Result;
+use Jkbennemann\Foliage\Core\Node;
+use Jkbennemann\Foliage\Core\TreeBuilder;
+use Jkbennemann\Foliage\Validator\Contracts\BaseValidator;
+use Jkbennemann\Foliage\Validator\Result;
 
-class BusinessRequirements
+class Foliage
 {
     public function __construct(
         private readonly BaseValidator $validator,

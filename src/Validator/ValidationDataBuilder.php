@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Validator;
+namespace Jkbennemann\Foliage\Validator;
 
 use Exception;
-use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
-use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationDataContract;
+use Jkbennemann\Foliage\Core\BaseValidationRule;
+use Jkbennemann\Foliage\Core\Payload\ArrayPayload;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Validator\Contracts\ValidationDataContract;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
@@ -76,6 +76,9 @@ class ValidationDataBuilder implements ValidationDataContract
         }
     }
 
+    /**
+     * @throws ReflectionException
+     */
     private function getPayloadParameters(string $payloadClass): array
     {
         $reflection = new ReflectionClass($payloadClass);

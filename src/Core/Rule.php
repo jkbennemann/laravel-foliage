@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core;
+namespace Jkbennemann\Foliage\Core;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Validator\Normalizer;
+use Jkbennemann\Foliage\Core\Contracts\RuleParserContract;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Validator\Normalizer;
 use ReflectionException;
 
 class Rule

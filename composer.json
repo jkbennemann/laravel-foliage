@@ -1,5 +1,5 @@
 {
-    "name": "jkbennemann/laravel-validate-business-requirements",
+    "name": "jkbennemann/laravel-foliage",
     "version": "0.1.0",
     "description": "This packages allows you to validate arbitrary business requirements within your application against a defined set of rules.",
     "keywords": [
@@ -10,7 +10,7 @@
         "business requirements",
         "rules"
     ],
-    "homepage": "https://github.com/jkbennemann/laravel-validate-business-requirements",
+    "homepage": "https://github.com/jkbennemann/laravel-foliage",
     "license": "MIT",
     "authors": [
         {
@@ -41,19 +41,19 @@
     },
     "autoload": {
         "psr-4": {
-            "Jkbennemann\\BusinessRequirements\\": "src/",
-            "Jkbennemann\\BusinessRequirements\\Database\\Factories\\": "database/factories/"
+            "Jkbennemann\\Foliage\\": "src/",
+            "Jkbennemann\\Foliage\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jkbennemann\\BusinessRequirements\\Tests\\": "tests/",
+            "Jkbennemann\\Foliage\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-laravel-validate-business-requirements --ansi",
+        "clear": "@php vendor/bin/testbench package:purge-laravel-foliage --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
             "@composer run prepare",
@@ -79,11 +79,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Jkbennemann\\BusinessRequirements\\BusinessRequirementsServiceProvider"
+                "Jkbennemann\\Foliage\\FoliageServiceProvider"
             ],
             "aliases": {
-                "BusinessRequirements": "Jkbennemann\\BusinessRequirements\\Facades\\BusinessRequirements",
-                "Rule": "Jkbennemann\\BusinessRequirements\\Facades\\Rule"
+                "Foliage": "Jkbennemann\\Foliage\\Facades\\Foliage",
+                "Rule": "Jkbennemann\\Foliage\\Facades\\Rule"
             }
         }
     },

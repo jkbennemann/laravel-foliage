@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Validator;
+namespace Jkbennemann\Foliage\Validator;
 
 use Illuminate\Support\Collection;
-use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Core\Rule;
+use Jkbennemann\Foliage\Core\Node;
+use Jkbennemann\Foliage\Core\Rule;
 
 class Normalizer
 {
@@ -115,7 +115,7 @@ class Normalizer
             return $rule->fromNode($node);
         }
 
-        return \Jkbennemann\BusinessRequirements\Facades\Rule::empty();
+        return \Jkbennemann\Foliage\Facades\Rule::empty();
     }
 
     private function rulesCount(Collection $items): int

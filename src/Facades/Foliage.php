@@ -6,10 +6,13 @@ namespace Jkbennemann\Foliage\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Rule extends Facade
+/**
+ * @see \Jkbennemann\Foliage\Foliage
+ */
+class Foliage extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Jkbennemann\Foliage\Core\Rule::class;
+        return \Jkbennemann\Foliage\Foliage::class;
     }
 }

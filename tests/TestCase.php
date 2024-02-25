@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Tests;
+namespace Jkbennemann\Foliage\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Jkbennemann\BusinessRequirements\BusinessRequirementsServiceProvider;
+use Jkbennemann\Foliage\FoliageServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelData\LaravelDataServiceProvider;
 
@@ -16,14 +16,14 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Jkbennemann\\BusinessRequirements\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Jkbennemann\\Foliage\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app): array
     {
         return [
-            BusinessRequirementsServiceProvider::class,
+            FoliageServiceProvider::class,
             LaravelDataServiceProvider::class,
         ];
     }

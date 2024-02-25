@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Exceptions;
+namespace Jkbennemann\Foliage\Exceptions;
 
 use Exception;
 

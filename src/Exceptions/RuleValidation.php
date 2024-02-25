@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Exceptions;
+namespace Jkbennemann\Foliage\Exceptions;
 
 use Exception;
-use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Core\BaseValidationRule;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
 use Throwable;
 
 class RuleValidation extends Exception

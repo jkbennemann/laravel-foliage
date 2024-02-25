@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Jkbennemann\BusinessRequirements\Facades\Rule;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
-use Jkbennemann\BusinessRequirements\Validator\Normalizer;
+use Jkbennemann\Foliage\Facades\Rule;
+use Jkbennemann\Foliage\Tests\Rules\RuleOne;
+use Jkbennemann\Foliage\Tests\Rules\RuleTwo;
+use Jkbennemann\Foliage\Validator\Normalizer;
 
 it('can normalize an empty rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -36,7 +36,7 @@ it('can normalize an empty rule', function () {
 });
 
 it('can normalize a single rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -64,7 +64,7 @@ it('can normalize a single rule', function () {
 });
 
 it('can normalize a single not rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -92,7 +92,7 @@ it('can normalize a single not rule', function () {
 });
 
 it('can normalize a conjunction rule with two single rules', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -124,7 +124,7 @@ it('can normalize a conjunction rule with two single rules', function () {
 });
 
 it('can normalize a conjunction rule with three single rules', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -157,7 +157,7 @@ it('can normalize a conjunction rule with three single rules', function () {
 });
 
 it('can normalize a conjunction rule with all combination of rules', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);

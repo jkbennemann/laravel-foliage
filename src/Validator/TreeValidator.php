@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Validator;
+namespace Jkbennemann\Foliage\Validator;
 
-use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\BaseValidator;
+use Jkbennemann\Foliage\Core\Node;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Validator\Contracts\BaseValidator;
 
 class TreeValidator extends BaseValidator
 {

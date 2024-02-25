@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core\Payload;
+namespace Jkbennemann\Foliage\Core\Payload;
 
 class ArrayPayload extends BaseValidationPayload
 {

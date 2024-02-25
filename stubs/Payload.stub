@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace {namespace};
 
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
 
 class {class} extends BaseValidationPayload
 {

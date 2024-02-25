@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace {namespace};
 
-use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Core\BaseValidationRule;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
 
 class {class} extends BaseValidationRule
 {

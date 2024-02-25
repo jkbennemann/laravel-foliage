@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Commands;
+namespace Jkbennemann\Foliage\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -21,9 +21,9 @@ class CreatePayloadCommand extends Command
             $className .= 'Payload';
         }
 
-        $namespace = config('validate-business-requirements.payload_namespace');
+        $namespace = config('foliage.payload_namespace');
 
-        $content = File::get(base_path('vendor/jkbennemann/laravel-validate-business-requirements/stubs/Payload.stub'));
+        $content = File::get(base_path('vendor/jkbennemann/laravel-foliage/stubs/Payload.stub'));
         $content = Str::replace('{class}', $className, $content);
         $content = Str::replace('{namespace}', $namespace, $content);
 

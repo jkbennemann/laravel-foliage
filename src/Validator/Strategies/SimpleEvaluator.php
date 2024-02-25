@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Validator\Strategies;
+namespace Jkbennemann\Foliage\Validator\Strategies;
 
 use Exception;
-use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Validator\Contracts\ValidationStrategy;
+use Jkbennemann\Foliage\Core\Node;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Validator\Contracts\ValidationStrategy;
 
 class SimpleEvaluator extends ValidationStrategy
 {

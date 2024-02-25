@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
-use Jkbennemann\BusinessRequirements\Core\Rule as RuleAlias;
-use Jkbennemann\BusinessRequirements\Core\RuleParser;
-use Jkbennemann\BusinessRequirements\Core\TreeBuilder;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Facades\Rule;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
+use Jkbennemann\Foliage\Core\Node;
+use Jkbennemann\Foliage\Core\Payload\ArrayPayload;
+use Jkbennemann\Foliage\Core\Rule as RuleAlias;
+use Jkbennemann\Foliage\Core\RuleParser;
+use Jkbennemann\Foliage\Core\TreeBuilder;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Facades\Rule;
+use Jkbennemann\Foliage\Tests\Rules\RuleOne;
+use Jkbennemann\Foliage\Tests\Rules\RuleTwo;
 
 it('can build an empty tree structure', function () {
     $rule = Rule::empty();
@@ -24,7 +24,7 @@ it('can build an empty tree structure', function () {
 });
 
 it('can build a simple tree structure with a single rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
     $rule = Rule::single(RuleOne::class, ['foo' => 'bar']);
@@ -47,7 +47,7 @@ it('can build a simple tree structure with a single rule', function () {
 });
 
 it('can build a simple tree structure with a negated single rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
     $rule = Rule::not(RuleOne::class, ['foo' => 'bar']);
@@ -70,7 +70,7 @@ it('can build a simple tree structure with a negated single rule', function () {
 });
 
 it('can build a json tree structure with a single rule - syntax 1', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
     $rule = Rule::single(RuleOne::class, ['foo' => 'bar']);
@@ -81,7 +81,7 @@ it('can build a json tree structure with a single rule - syntax 1', function () 
 });
 
 it('can build a json tree structure with a single rule - syntax 2', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
     $rule = Rule::single(RuleOne::class, new ArrayPayload([
@@ -94,7 +94,7 @@ it('can build a json tree structure with a single rule - syntax 2', function () 
 });
 
 it('can build a simple tree structure with multiple rules - syntax 1', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -103,6 +103,8 @@ it('can build a simple tree structure with multiple rules - syntax 1', function 
         Rule::single(RuleTwo::class, ['bar' => 'baz'])
     );
     $ruleData = $rule->toArray();
+
+    ray(json_encode($ruleData));
 
     expect($rule)
         ->toBeInstanceOf(RuleAlias::class)
@@ -141,7 +143,7 @@ it('can build a simple tree structure with multiple rules - syntax 1', function 
 });
 
 it('can build a simple tree structure with multiple rules - syntax 2', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);

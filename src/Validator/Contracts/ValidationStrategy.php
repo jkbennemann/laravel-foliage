@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Validator\Contracts;
+namespace Jkbennemann\Foliage\Validator\Contracts;
 
 use Illuminate\Support\Collection;
-use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
+use Jkbennemann\Foliage\Core\Node;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Validator\ValidationDataBuilder;
 
 abstract class ValidationStrategy
 {

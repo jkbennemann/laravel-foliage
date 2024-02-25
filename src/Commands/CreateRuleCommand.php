@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Commands;
+namespace Jkbennemann\Foliage\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -24,9 +24,9 @@ class CreateRuleCommand extends Command
             Str::remove('Rule', $className, false)
         );
 
-        $namespace = config('validate-business-requirements.rules_namespace');
+        $namespace = config('foliage.rules_namespace');
 
-        $content = File::get(base_path('vendor/jkbennemann/laravel-validate-business-requirements/stubs/Rule.stub'));
+        $content = File::get(base_path('vendor/jkbennemann/laravel-foliage/stubs/Rule.stub'));
         $content = Str::replace('{class}', $className, $content);
         $content = Str::replace('{namespace}', $namespace, $content);
         $content = Str::replace('{key}', $ruleKey, $content);

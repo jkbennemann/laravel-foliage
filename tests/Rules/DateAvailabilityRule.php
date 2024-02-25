@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Tests\Rules;
+namespace Jkbennemann\Foliage\Tests\Rules;
 
-use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Core\Payload\DateAvailabilityPayloadBase;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Core\BaseValidationRule;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Core\Payload\DateAvailabilityPayloadBase;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
 
 class DateAvailabilityRule extends BaseValidationRule
 {

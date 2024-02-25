@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core;
+namespace Jkbennemann\Foliage\Core;
 
-use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Core\Payload\ArrayPayload;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
 use Throwable;
 
 abstract class BaseValidationRule

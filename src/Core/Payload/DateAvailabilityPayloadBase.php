@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core\Payload;
+namespace Jkbennemann\Foliage\Core\Payload;
 
 use DateTimeInterface;
 use Spatie\LaravelData\Attributes\WithTransformer;

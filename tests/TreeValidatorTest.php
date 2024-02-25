@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
-use Jkbennemann\BusinessRequirements\Facades\Rule;
-use Jkbennemann\BusinessRequirements\Tests\Rules\MaximumAmountRule;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleOne;
-use Jkbennemann\BusinessRequirements\Tests\Rules\RuleTwo;
-use Jkbennemann\BusinessRequirements\Tests\Rules\UserHasPermissionRule;
-use Jkbennemann\BusinessRequirements\Tests\Rules\UserIsAdminRule;
-use Jkbennemann\BusinessRequirements\Validator\Strategies\PostOrderEvaluator;
-use Jkbennemann\BusinessRequirements\Validator\TreeValidator;
-use Jkbennemann\BusinessRequirements\Validator\ValidationDataBuilder;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
+use Jkbennemann\Foliage\Facades\Rule;
+use Jkbennemann\Foliage\Tests\Rules\MaximumAmountRule;
+use Jkbennemann\Foliage\Tests\Rules\RuleOne;
+use Jkbennemann\Foliage\Tests\Rules\RuleTwo;
+use Jkbennemann\Foliage\Tests\Rules\UserHasPermissionRule;
+use Jkbennemann\Foliage\Tests\Rules\UserIsAdminRule;
+use Jkbennemann\Foliage\Validator\Strategies\PostOrderEvaluator;
+use Jkbennemann\Foliage\Validator\TreeValidator;
+use Jkbennemann\Foliage\Validator\ValidationDataBuilder;
 
 it('can validate an empty rule', function () {
     $node = Rule::empty()->node();
@@ -23,7 +23,7 @@ it('can validate an empty rule', function () {
 });
 
 it('can validate a simple rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -36,7 +36,7 @@ it('can validate a simple rule', function () {
 });
 
 it('throws an exception on rule validation error', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -47,7 +47,7 @@ it('throws an exception on rule validation error', function () {
 })->throws(RuleValidation::class);
 
 it('does not throw an exception on silent rule validation error', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -61,7 +61,7 @@ it('does not throw an exception on silent rule validation error', function () {
 });
 
 it('can validate a simple rule inverse rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -74,7 +74,7 @@ it('can validate a simple rule inverse rule', function () {
 });
 
 it('throws an exception on inverse rule validation error', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
     ]);
 
@@ -85,7 +85,7 @@ it('throws an exception on inverse rule validation error', function () {
 })->throws(RuleValidation::class);
 
 it('can validate a conjunction rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -100,7 +100,7 @@ it('can validate a conjunction rule', function () {
 })->expectNotToPerformAssertions();
 
 it('throws an exception on a conjunction rule validation error', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -115,7 +115,7 @@ it('throws an exception on a conjunction rule validation error', function () {
 })->throws(RuleValidation::class);
 
 it('throws an exception on a disjunction rule validation error', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -130,7 +130,7 @@ it('throws an exception on a disjunction rule validation error', function () {
 })->throws(RuleValidation::class);
 
 it('can validate a disjunction rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -145,7 +145,7 @@ it('can validate a disjunction rule', function () {
 })->expectNotToPerformAssertions();
 
 it('can validate a multi-level disjunction rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -159,7 +159,7 @@ it('can validate a multi-level disjunction rule', function () {
         )
     );
 
-    $normalizer = new \Jkbennemann\BusinessRequirements\Validator\Normalizer();
+    $normalizer = new \Jkbennemann\Foliage\Validator\Normalizer();
     $node = $normalizer->normalize($rule)->node();
 
     $validator = new TreeValidator(new ValidationDataBuilder(), new PostOrderEvaluator());
@@ -167,7 +167,7 @@ it('can validate a multi-level disjunction rule', function () {
 })->expectNotToPerformAssertions();
 
 it('can validate a multi-level conjunction rule', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         RuleOne::class,
         RuleTwo::class,
     ]);
@@ -180,7 +180,7 @@ it('can validate a multi-level conjunction rule', function () {
         )
     );
 
-    $normalizer = new \Jkbennemann\BusinessRequirements\Validator\Normalizer();
+    $normalizer = new \Jkbennemann\Foliage\Validator\Normalizer();
     $node = $normalizer->normalize($rule)->node();
 
     $validator = new TreeValidator(new ValidationDataBuilder(), new PostOrderEvaluator());
@@ -190,7 +190,7 @@ it('can validate a multi-level conjunction rule', function () {
 });
 
 it('can validate a multi-level disjunction rule with custom payloads - violate rule 1 only', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         UserIsAdminRule::class,
         UserHasPermissionRule::class,
         MaximumAmountRule::class,
@@ -214,7 +214,7 @@ it('can validate a multi-level disjunction rule with custom payloads - violate r
 });
 
 it('can validate a multi-level disjunction rule with custom payloads - violate first rule of conjunction only', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         UserIsAdminRule::class,
         UserHasPermissionRule::class,
         MaximumAmountRule::class,
@@ -228,7 +228,7 @@ it('can validate a multi-level disjunction rule with custom payloads - violate f
         )
     );
 
-    $normalizer = new \Jkbennemann\BusinessRequirements\Validator\Normalizer();
+    $normalizer = new \Jkbennemann\Foliage\Validator\Normalizer();
     $node = $normalizer->normalize($node)->node();
 
     $validator = new TreeValidator(new ValidationDataBuilder(), new PostOrderEvaluator());
@@ -242,7 +242,7 @@ it('can validate a multi-level disjunction rule with custom payloads - violate f
 });
 
 it('can validate a multi-level disjunction rule with custom payloads - violate second rule of conjunction only', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         UserIsAdminRule::class,
         UserHasPermissionRule::class,
         MaximumAmountRule::class,
@@ -267,7 +267,7 @@ it('can validate a multi-level disjunction rule with custom payloads - violate s
 });
 
 it('can validate a multi-level disjunction rule with custom payloads - violate rule 1 and 2', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         UserIsAdminRule::class,
         UserHasPermissionRule::class,
         MaximumAmountRule::class,
@@ -290,7 +290,7 @@ it('can validate a multi-level disjunction rule with custom payloads - violate r
 })->throws(RuleValidation::class);
 
 it('can validate a multi-level disjunction rule with custom payloads silently - violate rule 1 and 2', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         UserIsAdminRule::class,
         UserHasPermissionRule::class,
         MaximumAmountRule::class,
@@ -319,7 +319,7 @@ it('can validate a multi-level disjunction rule with custom payloads silently - 
 });
 
 it('can validate permissions with aliased payload', function () {
-    config()->set('validate-business-requirements.available_rules', [
+    config()->set('foliage.available_rules', [
         UserHasPermissionRule::class,
         UserIsAdminRule::class,
     ]);

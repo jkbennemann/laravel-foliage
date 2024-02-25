@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Tests\Payloads;
+namespace Jkbennemann\Foliage\Tests\Payloads;
 
-use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
 
 class PermissionsPayload extends BaseValidationPayload
 {

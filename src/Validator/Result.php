@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Validator;
+namespace Jkbennemann\Foliage\Validator;
 
 use Illuminate\Support\Collection;
 

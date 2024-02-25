@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core;
+namespace Jkbennemann\Foliage\Core;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Jkbennemann\BusinessRequirements\Facades\Rule as RuleAlias;
+use Jkbennemann\Foliage\Facades\Rule as RuleAlias;
 use ReflectionException;
 
 trait HasValidationRules

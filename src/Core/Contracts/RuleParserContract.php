@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jkbennemann\BusinessRequirements\Core\Contracts;
+namespace Jkbennemann\Foliage\Core\Contracts;
 
-use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
+use Jkbennemann\Foliage\Core\BaseValidationRule;
 
 interface RuleParserContract
 {
