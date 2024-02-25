@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `laravel-validate-business-requirements` will be documented in this file.
+All notable changes to `laravel-foliage` will be documented in this file.
 
 ## v0.1.0 - 2024-02-25
 
