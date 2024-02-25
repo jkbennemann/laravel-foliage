@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-foliage` will be documented in this file.
 
+## v0.1.1 - 2024-02-25
+
+- Update README.md
+
 ## v0.1.0 - 2024-02-25
 
 - Allow multiple logical rules
