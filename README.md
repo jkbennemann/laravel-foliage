@@ -435,6 +435,19 @@ class SampleRule extends BaseValidationRule
     }
 }
 ```
+
+To construct the rule you can now validate your business logic like this:
+```php
+$payload = [
+    'date' => now(),
+];
+
+$rule = Rule::single(SampleRule::class, ['until' => Carbon::make('01-02-2024')])
+
+$result = Foliage::validateSilently($rule->node(), $payload);
+$result->isValid();
+$result->errors();
+```
 ## Testing
 
 ```bash
