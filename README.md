@@ -31,7 +31,7 @@ composer require jkbennemann/laravel-foliage
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-foliage-config"
+php artisan vendor:publish --tag="foliage-config"
 ```
 
 This is the contents of the published config file:
@@ -40,6 +40,7 @@ This is the contents of the published config file:
 return [
     'available_rules' => [
         //add your rules here
+        //SampleRule::class,
     ],
 
     'rule_parser' => \Jkbennemann\Foliage\Core\RuleParser::class,
