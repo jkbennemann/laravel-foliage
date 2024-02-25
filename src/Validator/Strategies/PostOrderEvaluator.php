@@ -34,7 +34,25 @@ class PostOrderEvaluator extends ValidationStrategy
     public function evaluateNode(?Node $node, array $payload, ?Node $parent): ?bool
     {
         if ($node->isLeaf) {
-            $this->evaluateLeaf($node, $payload, $parent);
+            try {
+                $this->evaluateLeaf($node, $payload, $parent);
+
+                return true;
+            } catch (RuleValidation $exception) {
+                if ($parent === null) {
+                    $this->validationErrors = collect([$exception]);
+
+                    $this->isValid = false;
+
+                    if ($this->raiseException) {
+                        throw $exception;
+                    }
+
+                    return false;
+                }
+
+                throw $exception;
+            }
         }
 
         if ($node !== null) {
