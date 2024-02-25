@@ -421,7 +421,7 @@ class SampleRule extends BaseValidationRule
         $dateNeeded = $ruleSettings['until'];
 
         if ($payload->date->lt($dateNeeded)) {
-            return true;
+            return;
         }
         
         throw new \Jkbennemann\Foliage\Exceptions\RuleValidation($this, 'Not available', $payload);
