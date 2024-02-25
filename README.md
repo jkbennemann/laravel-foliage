@@ -238,6 +238,44 @@ Your model now has access to
 $node = $coupon->validationNode();  //returns a Node object for validation
 ```
 
+#### From existing array
+
+If you have an array, already in the tree structure, you can create a node from it like so
+```php
+$ruleData = [
+    'alias' => null,
+    'children' => [
+        [
+            'alias' => null,
+            'children' => [],
+            'data' => [
+                'foo' => 'bar',
+            ],
+            'name' => 'rule_1',
+            'operation' => null,
+            'type' => 'leaf',
+        ],
+        [
+            'alias' => null,
+            'children' => [],
+            'data' => [
+                'bar' => 'baz',
+            ],
+            'name' => 'rule_2',
+            'operation' => null,
+            'type' => 'leaf',
+        ],
+    ],
+    'data' => null,
+    'name' => null,
+    'operation' => 'AND',
+    'type' => 'node',
+]
+
+$builder = app(\Jkbennemann\Foliage\Core\TreeBuilder::class);
+$node = $builder->build($ruleData);
+```
+
 ### Validating rules
 
 To validate a created set of rules you can
@@ -296,6 +334,107 @@ $validator->withoutExceptions();
 $validator->withExceptions();
 ```
 
+### Create a new Validation Rule
+
+If you want to create a new rule, you can run the `artisan` command.
+```
+php artisan validation:create-rule SampleRule
+```
+
+This command creates a new rule within the namespace, specified inside the config file.  
+The content will be 
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\BusinessRequirements\Rules;
+
+use Jkbennemann\Foliage\Core\BaseValidationRule;
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+use Jkbennemann\Foliage\Exceptions\RuleValidation;
+
+class SampleRule extends BaseValidationRule
+{
+    /** @throws RuleValidation */
+    protected function validation(BaseValidationPayload $payload): void
+    {
+        //your implementation
+    }
+
+    protected function key(): string
+    {
+        return 'sample';
+    }
+
+    protected function inverseValidationException(BaseValidationPayload $payload): RuleValidation
+    {
+        throw new RuleValidation($this, 'error_message', $payload, 'custom_key');
+    }
+}
+```
+
+### Create a new Payload Class
+
+If you want to create a payload class that can be used for a specific rule, you can run the `artisan` command.
+```
+php artisan validation:create-payload AvailabilityPayload
+```
+
+This command creates a new payload within the namespace, specified inside the config file.  
+The content will be
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\BusinessRequirements\Payloads;
+
+use Jkbennemann\Foliage\Core\Payload\BaseValidationPayload;
+
+class AvailabilityPayload extends BaseValidationPayload
+{
+    public function __construct(
+    ) {
+    }
+}
+```
+
+You can add any arguments to the constructor you like, e.g:
+```php
+public function __construct(public \Illuminate\Support\Carbon $date) {}
+```
+
+Now inside of you validation rule, you can override the used payload class for this rule as follows:
+```php
+class SampleRule extends BaseValidationRule
+{
+    /**
+    * @param AvailabilityPayload $payload 
+    * @throws RuleValidation 
+    */
+    protected function validation(BaseValidationPayload $payload): void
+    {
+        $ruleSettings = $this->settings();
+        $dateNeeded = $ruleSettings['until'];
+
+        if ($payload->date->lt($dateNeeded)) {
+            return true;
+        }
+        
+        throw new \Jkbennemann\Foliage\Exceptions\RuleValidation($this, 'Not available', $payload);
+    }
+    
+    //..
+    
+    public function payloadObjectClass(): string
+    {
+        return AvailabilityPayload::class;
+    }
+}
+```
 ## Testing
 
 ```bash
