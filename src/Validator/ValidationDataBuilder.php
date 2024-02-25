@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Jkbennemann\BusinessRequirements\Validator;
 
-use _PHPStan_11268e5ee\Nette\Neon\Exception;
+use Exception;
 use Jkbennemann\BusinessRequirements\Core\BaseValidationRule;
 use Jkbennemann\BusinessRequirements\Core\Payload\ArrayPayload;
 use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;

@@ -6,55 +6,45 @@ namespace Jkbennemann\BusinessRequirements\Validator\Contracts;
 
 use Illuminate\Support\Collection;
 use Jkbennemann\BusinessRequirements\Core\Node;
-use Jkbennemann\BusinessRequirements\Exceptions\RuleValidation;
 
 abstract class BaseValidator
 {
-    protected Collection $validationErrors;
-
-    protected bool $isValid = true;
-
     public function __construct(
         protected readonly ValidationDataContract $payloadBuilder,
-        protected bool $raiseException = true
+        protected readonly ValidationStrategy $strategy
     ) {
-        $this->validationErrors = new Collection();
     }
 
     abstract public function evaluate(Node $rootNode, array $payload): bool;
 
     public function setRaiseException(bool $raiseException): self
     {
-        $this->raiseException = $raiseException;
+        $this->strategy->setRaiseException($raiseException);
 
         return $this;
     }
 
     public function withoutExceptions(): self
     {
-        $this->raiseException = false;
+        $this->strategy->withoutExceptions();
 
         return $this;
     }
 
     public function withExceptions(): self
     {
-        $this->raiseException = true;
+        $this->strategy->withExceptions();
 
         return $this;
     }
 
     public function errors(): Collection
     {
-        return $this->validationErrors
-            ->filter()
-            ->unique(function (RuleValidation $error) {
-                return $error->failedRule()?->normalizedKey() ?: 'generic';
-            });
+        return $this->strategy->errors();
     }
 
     public function isValid(): bool
     {
-        return $this->isValid;
+        return $this->strategy->isValid();
     }
 }

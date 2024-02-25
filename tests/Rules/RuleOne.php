@@ -16,7 +16,7 @@ class RuleOne extends BaseValidationRule
         $settings = $this->settings()['foo'];
         $validateAgainst = $payload->toArray();
         if (! in_array($settings, $validateAgainst, true)) {
-            throw new RuleValidation($this, 'data mismatch', $payload);
+            throw new RuleValidation($this, 'rule 1 data mismatch', $payload);
         }
     }
 

@@ -6,25 +6,29 @@ namespace Jkbennemann\BusinessRequirements\Core;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Jkbennemann\BusinessRequirements\Facades\Rule as RuleAlias;
 use ReflectionException;
 
 trait HasValidationRules
 {
-    protected string $rulesField = 'validation_rules';
-
     /**
      * @throws ReflectionException|BindingResolutionException|Exception
      */
-    public function ruleTree(): Node
+    public function validationNode(): Node
     {
-        $rules = $this->getAttribute($this->rulesField);
+        $rules = $this->getAttribute($this->rulesFieldName());
         $rulesArray = is_string($rules) ? json_decode($rules, true) : $rules;
         $builder = app(TreeBuilder::class);
 
         if (empty($rulesArray)) {
-            $rulesArray = [Rule::empty()->node()->toArray()];
+            $rulesArray = [RuleAlias::empty()->node()->toArray()];
         }
 
         return $builder->build($rulesArray);
+    }
+
+    protected function rulesFieldName(): string
+    {
+        return 'validation_rules';
     }
 }

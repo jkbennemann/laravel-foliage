@@ -1,5 +1,6 @@
 {
     "name": "jkbennemann/laravel-validate-business-requirements",
+    "version": "0.1.0",
     "description": "This packages allows you to validate arbitrary business requirements within your application against a defined set of rules.",
     "keywords": [
         "Jakob Bennemann",
@@ -25,9 +26,10 @@
         "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.15",
+        "larastan/larastan": "^2.0.1",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^7.8",
-        "larastan/larastan": "^2.0.1",
         "orchestra/testbench": "^8.8",
         "pestphp/pest": "^2.20",
         "pestphp/pest-plugin-arch": "^2.0",
@@ -85,6 +87,6 @@
             }
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

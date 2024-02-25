@@ -7,6 +7,7 @@ namespace Jkbennemann\BusinessRequirements\Core;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Jkbennemann\BusinessRequirements\Core\Contracts\RuleParserContract;
 use Jkbennemann\BusinessRequirements\Core\Payload\BaseValidationPayload;
+use Jkbennemann\BusinessRequirements\Validator\Normalizer;
 use ReflectionException;
 
 class Rule
@@ -27,9 +28,11 @@ class Rule
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public function single(string $rule, array|BaseValidationPayload $data = [], ?Node $parent = null): Rule
+    public function single(Rule|string $rule, array|BaseValidationPayload $data = [], ?Node $parent = null): Rule
     {
-        $rule = $this->ruleParser->parse($rule);
+        if (is_string($rule)) {
+            $rule = $this->ruleParser->parse($rule);
+        }
         /**
          * @var BaseValidationRule $rule
          */
@@ -91,6 +94,16 @@ class Rule
 
     public function node(): Node
     {
+        if (! $this->node->isBinary()) {
+            $normalizer = new Normalizer();
+            $this->node = $normalizer->normalize(self::fromNode($this->node))->node;
+        }
+
+        return $this->node;
+    }
+
+    public function rawNode(): Node
+    {
         return $this->node;
     }
 
@@ -125,7 +138,7 @@ class Rule
             return [];
         }
 
-        return $this->node->toArray();
+        return $this->node()->toArray();
     }
 
     public function jsonSerialize(): string
